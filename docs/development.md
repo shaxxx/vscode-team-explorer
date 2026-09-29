@@ -264,6 +264,13 @@ Other behaviour worth knowing, verified against `tf.exe`'s real output and this 
   containing a conflicted file answers "none" — a false negative. Only `resolve <items>
   /recursive /preview` reliably lists conflicts; `status` shows nothing about them, and `get` just
   exits non-zero even when it merged cleanly on its own.
+- **`checkout`, `undo` and `add` name items relative to the directory tf runs in** (the opened
+  folder). Under it the folder header is relative (`src\Models:`), an item directly in it gets no
+  header at all, and only outside it is the header absolute; a trailing `$/...:` block lists other
+  users' checkouts of the item. `get` is different: its headers are always absolute.
+  `scanAffectedItems` resolves all of this against the client's cwd. Reading a relative header as
+  absolute left Undo unable to find the open editor, so the typed edit stayed on screen over a
+  file tf had just made read-only again.
 - **`vc delete` of a folder by local path works even after VS Code has already removed the folder
   from disk** (a delete needs no local copy to still succeed) — **unless a child under it still has
   a pending change of its own**, in which case it fails with `TF14060`: "The item ... cannot be

@@ -109,7 +109,11 @@ export async function runMutation(
     return FAILED;
   }
 
-  const affected = scanAffectedItems(stdout);
+  // tf names affected items relative to the directory it ran in, and sees
+  // that directory in its own terms (`Z:\...` under Wine). No mapper means no
+  // way to say what those terms are, and then relative names are dropped.
+  const tfCwd = client.cwd === undefined ? undefined : service.pathMapper?.toWinePath(client.cwd);
+  const affected = scanAffectedItems(stdout, tfCwd);
 
   // KILLED, not failed. Node reports a signalled child as `code === null`, and
   // the exit code that replaces it says nothing at all -- so neither can we.

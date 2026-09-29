@@ -685,6 +685,11 @@ export class TfClient {
   get timeoutMs(): number {
     return this.options.timeoutMs;
   }
+
+  /** The directory a call without its own `cwd` runs in; tf's output is relative to it. */
+  get cwd(): string | undefined {
+    return this.options.cwd;
+  }
 }
 
 export type TfErrorKind =
@@ -760,22 +765,43 @@ export function classifyError(exitCode: number, stdout: string, stderr: string):
  * tf prints a directory header ending in ':' followed by bare file names, and
  * for undo prefixes them with a verb: "Undoing edit: Foo.cs".
  * It never parses dates — tf's date format differs per machine locale.
+ *
+ * The header is RELATIVE to the directory tf ran in when the item is under
+ * it, and absent for an item directly in it; only outside it is the header
+ * absolute. `cwd` is that directory in tf's own terms (`Z:\...` under Wine).
+ * Without it a relative header is dropped rather than passed off as
+ * absolute: Undo read `Integrator.Standard.POSIntegration\PayDevice:` as a
+ * full path, matched no editor, and left the typed edit on screen over a file
+ * tf had just made read-only.
  */
-export function scanAffectedItems(stdout: string): string[] {
+export function scanAffectedItems(stdout: string, cwd?: string): string[] {
   const items: string[] = [];
-  let dir = '';
+  const under = (base: string, rest: string) => (base.endsWith('\\') ? base : base + '\\') + rest;
+  let dir = cwd ?? '';
 
   for (const raw of stdout.split(/\r?\n/)) {
     const line = raw.trim();
     if (line === '') continue;
 
     if (line.endsWith(':') && !/^[A-Za-z]+ [a-z]+:/.test(line)) {
-      dir = line.slice(0, -1);
+      const header = line.slice(0, -1);
+      if (header.startsWith('$/')) {
+        // A server path: tf listing other users' checkouts of that item
+        // ("opened for edit in KARLO;Karlo"). Nothing under it is ours.
+        dir = '';
+      } else if (/^[A-Za-z]:\\/.test(header) || header.startsWith('\\\\')) {
+        dir = header;
+      } else {
+        dir = cwd ? under(cwd, header) : '';
+      }
       continue;
     }
 
     const name = line.replace(/^[A-Za-z]+ [a-z]+:\s*/, '');
-    if (dir) items.push(dir + '\\' + name);
+    // A file name cannot contain a colon, so this is one of tf's messages
+    // ("...: No file matches."), not an item.
+    if (name.includes(':')) continue;
+    if (dir) items.push(under(dir, name));
   }
 
   return items;

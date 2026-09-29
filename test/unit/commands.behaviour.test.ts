@@ -26,6 +26,8 @@ function harness(opts: {
   pending?: Record<string, ChangeFlag[]>;
   /** Called as each tf command starts. */
   onRun?: () => void;
+  /** The directory tf runs in, which its checkout/undo output is relative to. */
+  cwd?: string;
 } = {}) {
   const runs: Run[] = [];
   const platform = opts.platform ?? 'win32';
@@ -39,6 +41,7 @@ function harness(opts: {
 
   const client = {
     timeoutMs: 1000,
+    cwd: opts.cwd,
     run: async (args: string[]) => {
       opts.onRun?.();
       if (opts.runFails) throw opts.runFails;
@@ -270,6 +273,57 @@ describe('Undo and the editor buffer', () => {
 
     expect(runs).toHaveLength(1);
     expect(executed.map((e) => e.id)).not.toContain('workbench.action.files.revert');
+  });
+
+  // tf prints the folder relative to the directory it runs in (the opened
+  // folder), and no folder at all for a file directly in it. Read as absolute,
+  // `Integrator.Standard.POSIntegration\PayDevice:` became
+  // `\Integrator.Standard.POSIntegration\PayDevice\TLVParser.cs`, matched no
+  // editor, and the typed edit stayed on screen over a read-only file with no
+  // pending change (observed 2026-09-29, `(1 dirty document(s) open)`).
+  it('reverts when tf names the folder relative to the directory it ran in', async () => {
+    harness({
+      cwd: 'C:\\work',
+      stdout: undoOutput('Vesta', 'Form1.vb'),
+      pending: { 'Form1.vb': ['Edit'] },
+    });
+    workspace.textDocuments = [dirtyDoc(winFile('Form1.vb').fsPath)] as never;
+    recorder.answers.push(S.undoConfirmYes);
+
+    await recorder.invoke('teamExplorer.undo', winFile('Form1.vb'));
+
+    expect(executed.map((e) => e.id)).toContain('workbench.action.files.revert');
+    expect(outputChannel.lines.join('\n')).not.toContain('no dirty editor to revert');
+  });
+
+  it('reverts when tf names no folder, because the file is in the directory it ran in', async () => {
+    harness({
+      cwd: 'C:\\work\\Vesta',
+      stdout: 'Undoing edit: Form1.vb\n',
+      pending: { 'Form1.vb': ['Edit'] },
+    });
+    workspace.textDocuments = [dirtyDoc(winFile('Form1.vb').fsPath)] as never;
+    recorder.answers.push(S.undoConfirmYes);
+
+    await recorder.invoke('teamExplorer.undo', winFile('Form1.vb'));
+
+    expect(executed.map((e) => e.id)).toContain('workbench.action.files.revert');
+  });
+
+  it('on Linux resolves the relative folder against the Wine form of the directory', async () => {
+    harness({
+      platform: 'linux',
+      cwd: '/home/shax/work',
+      stdout: undoOutput('Vesta', 'Form1.vb'),
+      pending: { 'Form1.vb': ['Edit'] },
+    });
+    const local = '/home/shax/work/Vesta/Form1.vb';
+    workspace.textDocuments = [dirtyDoc(local)] as never;
+    recorder.answers.push(S.undoConfirmYes);
+
+    await recorder.invoke('teamExplorer.undo', Uri.file(local));
+
+    expect(executed.map((e) => e.id)).toContain('workbench.action.files.revert');
   });
 });
 

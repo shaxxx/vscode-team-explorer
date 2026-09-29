@@ -90,6 +90,74 @@ describe('scanAffectedItems', () => {
   it('returns nothing for empty output', () => {
     expect(scanAffectedItems('')).toEqual([]);
   });
+
+  // tf prints a folder RELATIVE to its own working directory when the item is
+  // under it, and prints no folder at all for an item directly in it. Captured
+  // 2026-09-29 by checking out one already-checked-out file from four
+  // directories; the 61-byte checkout and 75-byte undo in the real log match
+  // the relative shape exactly. Taking the relative folder as absolute meant
+  // Undo never found the open editor, so the typed edit stayed in a dirty
+  // buffer on a file tf had just made read-only again.
+  describe('relative to the directory tf ran in', () => {
+    const cwd = 'c:\\work\\Shop\\Shop2023';
+
+    it('resolves a relative folder against it', () => {
+      const out = ['Integrator.Standard.POSIntegration\\PayDevice:', 'Undoing edit: TLVParser.cs', ''].join('\r\n');
+      expect(scanAffectedItems(out, cwd)).toEqual([
+        'c:\\work\\Shop\\Shop2023\\Integrator.Standard.POSIntegration\\PayDevice\\TLVParser.cs',
+      ]);
+    });
+
+    it('reads an item with no folder at all as one directly in it', () => {
+      expect(scanAffectedItems(['Fiskalizacija.cs', ''].join('\r\n'), cwd)).toEqual([
+        'c:\\work\\Shop\\Shop2023\\Fiskalizacija.cs',
+      ]);
+    });
+
+    it('still takes an absolute folder as it is', () => {
+      const out = ['C:\\work\\Other:', 'Undoing edit: A.cs', ''].join('\r\n');
+      expect(scanAffectedItems(out, cwd)).toEqual(['C:\\work\\Other\\A.cs']);
+    });
+
+    it('does not double the separator under a drive root', () => {
+      const out = ['work\\Shop\\Shop2023\\Raverus.FiskalizacijaDEV.Standard:', 'Fiskalizacija.cs'].join('\r\n');
+      expect(scanAffectedItems(out, 'C:\\')).toEqual([
+        'C:\\work\\Shop\\Shop2023\\Raverus.FiskalizacijaDEV.Standard\\Fiskalizacija.cs',
+      ]);
+    });
+
+    it('resolves under Wine against the Z: form of the directory', () => {
+      // Verbatim shape from FEDORA (partialSuccess.test.ts), run from ~.
+      const out = ['work\\Shop:', 'tfvc-x3', '', 'work\\Shop\\tfvc-x3:', 'clean.txt'].join('\n');
+      expect(scanAffectedItems(out, 'Z:\\home\\shax')).toEqual([
+        'Z:\\home\\shax\\work\\Shop\\tfvc-x3',
+        'Z:\\home\\shax\\work\\Shop\\tfvc-x3\\clean.txt',
+      ]);
+    });
+
+    it("does not read other users' checkouts as items", () => {
+      const out = [
+        'Fiskalizacija.cs',
+        '',
+        '$/Shop/Shop2023/Raverus.FiskalizacijaDEV.Standard/Fiskalizacija.cs:',
+        '   opened for edit in KARLO;Karlo',
+        '   opened for edit in LUKA;Luka',
+        '',
+      ].join('\r\n');
+      expect(scanAffectedItems(out, cwd)).toEqual(['c:\\work\\Shop\\Shop2023\\Fiskalizacija.cs']);
+    });
+
+    it('does not read a message as an item', () => {
+      // A file name cannot contain a colon; this is tf saying nothing matched.
+      const out = 'C:\\work\\Shop\\tfvc-nonexistent: No file matches.';
+      expect(scanAffectedItems(out, cwd)).toEqual([]);
+    });
+  });
+
+  it('never passes a relative folder off as absolute when the directory is unknown', () => {
+    const out = ['Integrator.Standard.POSIntegration\\PayDevice:', 'Undoing edit: TLVParser.cs'].join('\r\n');
+    expect(scanAffectedItems(out)).toEqual([]);
+  });
 });
 
 describe('scrubSecrets', () => {
