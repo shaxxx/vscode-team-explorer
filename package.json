@@ -3,7 +3,7 @@
   "displayName": "Team Explorer (TFVC)",
   "description": "Team Explorer-style TFVC for VS Code, on Windows and on Linux under Wine. Not affiliated with Microsoft.",
   "publisher": "integrator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "icon": "media/icon.png",
   "repository": {

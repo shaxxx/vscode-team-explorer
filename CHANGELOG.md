@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1
+
+- Fixed: automatic checkout now happens on the first keystroke. A single keystroke into a clean file used to do nothing, and only a second one checked the file out.
+- Fixed: Undo now discards the unsaved edits in an open editor for a file inside the opened folder. Before, the edit stayed on screen while the file was read-only again with no pending change.
+
 ## 1.0.0
 
 First public release.
