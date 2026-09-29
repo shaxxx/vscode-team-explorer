@@ -433,7 +433,9 @@ describe('AutoCheckout', () => {
     rmSync(dir, { recursive: true, force: true });
   });
 
-  // A keystroke leaves the document dirty; VS Code reports that WITH the change.
+  // A keystroke into an already-dirty document: VS Code reports it WITH the
+  // change. The first keystroke into a clean one is two events; see
+  // 'AutoCheckout suppression' below.
   const doc = (fsPath: string, text = 'clean ascii') => ({
     uri: Uri.file(fsPath),
     fileName: fsPath,
@@ -586,6 +588,49 @@ describe('AutoCheckout suppression', () => {
     await new Promise((r) => setTimeout(r, 50));
 
     expect(runs, 'a reload from disk pended the file').toHaveLength(0);
+    auto.dispose();
+  });
+
+  // What VS Code 1.139 actually sends for the FIRST keystroke into a clean
+  // file (read from its workbench and extension-host bundles): the edit with
+  // `isDirty: false`, because the document tracker reads the flag before the
+  // file model has set it, then a separate dirty-state event with NO content
+  // changes. Dropping both meant one Enter never checked out (observed
+  // 2026-09-29: the file stayed read-only, no `vc checkout` in the log).
+  const versioned = (p: string, version: number, isDirty: boolean) => ({ ...doc(p, isDirty), version });
+
+  it('checks out on the first keystroke, reported as a clean edit then a dirty-state event', async () => {
+    const { auto, runs } = build();
+
+    hooks.didChangeTextDocument.emit({ document: versioned(sfile, 2, false), contentChanges: [{ text: '\r\n' }] });
+    hooks.didChangeTextDocument.emit({ document: versioned(sfile, 2, true), contentChanges: [] });
+    await new Promise((r) => setTimeout(r, 50));
+
+    expect(runs).toHaveLength(1);
+    expect(runs[0].args).toEqual(['vc', 'checkout', '$/Vesta/Form1.vb']);
+    auto.dispose();
+  });
+
+  it('does NOT take a dirty-state event with no clean edit just before it for a keystroke', async () => {
+    // A buffer restored dirty from hot exit, or an encoding change on one
+    // that was already dirty: no keystroke happened.
+    const { auto, runs } = build();
+
+    hooks.didChangeTextDocument.emit({ document: versioned(sfile, 5, true), contentChanges: [] });
+    await new Promise((r) => setTimeout(r, 50));
+
+    expect(runs).toHaveLength(0);
+    auto.dispose();
+  });
+
+  it('does NOT pair a reload with a later, unrelated dirty-state event', async () => {
+    const { auto, runs } = build();
+
+    hooks.didChangeTextDocument.emit({ document: versioned(sfile, 2, false), contentChanges: [{ text: 'x' }] });
+    hooks.didChangeTextDocument.emit({ document: versioned(sfile, 3, true), contentChanges: [] });
+    await new Promise((r) => setTimeout(r, 50));
+
+    expect(runs).toHaveLength(0);
     auto.dispose();
   });
 

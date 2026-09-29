@@ -61,6 +61,13 @@ export class AutoCheckout implements vscode.Disposable {
     return true;
   }
 
+  /**
+   * The document version of each file's last edit that arrived while it was
+   * still clean -- a reload from disk, or a first keystroke; see the
+   * onDidChangeTextDocument handler for which.
+   */
+  private readonly cleanEdit = new Map<string, number>();
+
   private readonly disposables: vscode.Disposable[] = [];
 
   constructor(
@@ -72,14 +79,34 @@ export class AutoCheckout implements vscode.Disposable {
     this.disposables.push(
       vscode.workspace.onDidChangeTextDocument((e) => {
         if (this.mode() !== 'onEdit') return;
-        if (e.contentChanges.length === 0) return;
+        const document = e.document;
+        const key = AutoCheckout.key(document.uri.fsPath);
         // A get (Get Latest, Get This Version) that rewrites an OPEN, clean
         // file makes VS Code reload it, and the reload raises this event just
         // like a keystroke. Observed on FEDORA: the reload checked the file
-        // out, and the next Get Latest hit a conflict. Typing always leaves
-        // the document dirty; a reload from disk never does.
-        if (!e.document.isDirty) return;
-        void this.tryCheckout(e.document);
+        // out, and the next Get Latest hit a conflict. A reload leaves the
+        // document clean; typing makes it dirty.
+        //
+        // But not in the same event. VS Code reports the FIRST keystroke into
+        // a clean file with `isDirty: false` -- its document tracker reads the
+        // flag before the file model sets it -- and then sends the new dirty
+        // state as a separate event with no content changes (read from the
+        // 1.139 workbench and extension-host bundles). Ignoring both meant a
+        // single Enter never checked out. So an edit seen while clean is
+        // remembered, and a dirty-state event at that same version is the
+        // keystroke it was. A reload is never followed by one.
+        if (e.contentChanges.length > 0) {
+          if (document.isDirty) {
+            void this.tryCheckout(document);
+          } else {
+            this.cleanEdit.set(key, document.version);
+          }
+          return;
+        }
+        if (document.isDirty && this.cleanEdit.get(key) === document.version) {
+          this.cleanEdit.delete(key);
+          void this.tryCheckout(document);
+        }
       }),
     );
 
