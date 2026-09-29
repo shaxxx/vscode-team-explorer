@@ -1,0 +1,8 @@
+# Fixtures are byte-exact captures of real tf.exe output (CRLF, specific encodings).
+# Git must never convert line endings in them or they stop matching the tool.
+test/fixtures/** -text
+
+# The wrappers: a batch file needs CRLF, a shell script breaks on CR.
+*.cmd text eol=crlf
+wrappers/tfp text eol=lf
+wrappers/tfp-flatpak text eol=lf

@@ -1,0 +1,55 @@
+-------------------------------------------------------------------------------
+Changeset: 21082
+User: Filip
+Date: Monday, September 21, 2026 8:58:49 AM
+
+Comment:
+  Ispravak SQL pogreške pri učitavanju popisa proizvoda
+
+Items:
+  edit $/Shop/Shop2023/Distribution/Forms/frmInvoice.vb
+
+-------------------------------------------------------------------------------
+Changeset: 21043
+User: Filip
+Date: Monday, September 14, 2026 9:26:50 AM
+
+Comment:
+  Shop nova verzija paketa
+
+Items:
+  edit $/Shop/Shop2023/Distribution/AssemblyInfo.vb
+
+-------------------------------------------------------------------------------
+Changeset: 21032
+User: Filip
+Date: Thursday, September 10, 2026 3:15:06 PM
+
+Comment:
+  Click Object reference not set to an instance of an object bug fix
+
+Items:
+  edit $/Shop/Shop2023/Distribution/Forms/StatsForm.vb
+
+-------------------------------------------------------------------------------
+Changeset: 21019
+User: Boris
+Date: Tuesday, September 8, 2026 8:04:48 AM
+
+Comment:
+  Nova verzija sustava
+
+Items:
+  edit $/Shop/Shop2023/Distribution/AssemblyInfo.vb
+
+-------------------------------------------------------------------------------
+Changeset: 21018
+User: Filip
+Date: Monday, September 7, 2026 8:49:46 AM
+
+Comment:
+  Modul se ne pokreće nakon nadogradnje crash bug fix
+
+Items:
+  edit $/Shop/Shop2023/Distribution/sqlModule.vb
+

@@ -1,0 +1,5 @@
+===============================================================================
+Workspace : TFVC-PROBE-FIX (Filip)
+Collection: https://acme.visualstudio.com/
+ $/Shop/Shop2023/Enterprise.Till.Server/Web: C:\Users\user1\AppData\Local\Temp\tfvc-probe-fix
+ (cloaked) $/Shop/Shop2023/Enterprise.Till.Server/Web/order-kiosk:

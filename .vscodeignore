@@ -1,0 +1,31 @@
+# ALLOWLIST, not a denylist.
+#
+# This file used to list what to leave out, so anything new at the repo root
+# shipped by default. HANDOFF.md, a private planning file, once shipped this
+# way and carried machine details, and it went into the .vsix for anyone to
+# unzip.
+#
+# So: exclude everything, then name the few files the extension needs at
+# runtime. A new file has to be added here deliberately before it can ship.
+#
+# Name FILES here, never directories. vsce expands every pattern `p` into both
+# `p` and `p/**`, so a re-include of `dist/` also re-includes `dist/**` - which
+# silently put the 485 KB source map, and with it the text of every source
+# file, into the .vsix. Verified by running vsce, not by reasoning about it.
+**
+
+!dist/extension.js
+!media/history.js
+!media/history.css
+!media/conflicts.js
+!media/conflicts.css
+!media/explorer.js
+!media/explorer.css
+!media/shelvesets.js
+!media/shelvesets.css
+!media/team-explorer.svg
+!media/icon.png
+!CHANGELOG.md
+!LICENSE
+!THIRD-PARTY-NOTICES.md
+!package.json

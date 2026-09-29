@@ -1,0 +1,2 @@
+src\DemoShop\Models:
+Pending edit: Product.cs

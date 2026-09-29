@@ -1,0 +1,4 @@
+===============================================================================
+Workspace : TFVC-PROBE-FEDORA (Filip)
+Collection: https://acme.visualstudio.com/
+This workspace has no working folder mappings.

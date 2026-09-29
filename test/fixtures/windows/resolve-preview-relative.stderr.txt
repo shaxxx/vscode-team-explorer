@@ -1,0 +1,2 @@
+Program.cs: A non version controlled file or writable file by the same name already exists locally.
+Startup.cs: You have a conflicting pending change.

@@ -1,0 +1,13 @@
+-------------------------------------------------------------------------------
+Changeset: 13559
+User: Zoran
+Date: 26. travnja 2022. 10:29:56
+
+Comment:
+  exportPriceListSync - export ponekad nakon Base64Encode sadrzava znak jednakosti u sebi, a on nije ispravno protumacen unutar HeaderValuea, osim ako ga se prije toga ne UrlEncodeira
+  
+  Flexo: slanje cjenika u shop
+
+Items:
+  edit $/Shop/Shop2013/Distribution/classes/TransferApiClient.vb
+

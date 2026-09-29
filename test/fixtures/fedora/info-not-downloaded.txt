@@ -1,0 +1,110 @@
+Local information:
+  Local path : 
+  Server path: 
+  Changeset  : 0
+  Change     : none
+  Type       : 
+Server information:
+  Server path  : $/Ledger/CLAUDE.md
+  Changeset    : 20557
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: Tuesday, May 5, 2026 10:16:05 AM
+  Type         : file
+  File type    : utf-8
+  Size         : 6705
+
+Local information:
+  Local path : 
+  Server path: 
+  Changeset  : 0
+  Change     : none
+  Type       : 
+Server information:
+  Server path  : $/Ledger/dbo
+  Changeset    : 20492
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: Thursday, April 9, 2026 10:03:25 AM
+  Type         : folder
+
+Local information:
+  Local path : 
+  Server path: 
+  Changeset  : 0
+  Change     : none
+  Type       : 
+Server information:
+  Server path  : $/Ledger/docs
+  Changeset    : 20557
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: Tuesday, May 5, 2026 10:16:05 AM
+  Type         : folder
+
+Local information:
+  Local path : 
+  Server path: 
+  Changeset  : 0
+  Change     : none
+  Type       : 
+Server information:
+  Server path  : $/Ledger/Ledger.sln
+  Changeset    : 20492
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: Thursday, April 9, 2026 10:03:25 AM
+  Type         : file
+  File type    : utf-8
+  Size         : 1600
+
+Local information:
+  Local path : 
+  Server path: 
+  Changeset  : 0
+  Change     : none
+  Type       : 
+Server information:
+  Server path  : $/Ledger/Ledger.sqlproj
+  Changeset    : 20783
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: Tuesday, June 30, 2026 1:44:47 PM
+  Type         : file
+  File type    : utf-8
+  Size         : 698616
+
+Local information:
+  Local path : 
+  Server path: 
+  Changeset  : 0
+  Change     : none
+  Type       : 
+Server information:
+  Server path  : $/Ledger/Security
+  Changeset    : 20492
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: Thursday, April 9, 2026 10:03:25 AM
+  Type         : folder
+
+Local information:
+  Local path : 
+  Server path: 
+  Changeset  : 0
+  Change     : none
+  Type       : 
+Server information:
+  Server path  : 
+  Changeset    : 0
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 
+  Type         : 

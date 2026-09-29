@@ -1,0 +1,83 @@
+/* The Resolve Conflicts tab. VS Code theme colours only. */
+body {
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+  color: var(--vscode-foreground);
+  background: var(--vscode-editor-background);
+  padding: 0 16px 16px;
+}
+h1 {
+  font-size: 1.2em;
+  font-weight: 600;
+}
+.toolbar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+button {
+  background: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border: 1px solid var(--vscode-button-border, transparent);
+  border-radius: 2px;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+button:hover {
+  background: var(--vscode-button-secondaryHoverBackground);
+}
+button:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: 1px;
+}
+button.dim {
+  opacity: 0.5;
+}
+.row {
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 3px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+.row.selected {
+  border-color: var(--vscode-focusBorder);
+  background: var(--vscode-list-inactiveSelectionBackground);
+}
+.row:focus {
+  outline: 1px solid var(--vscode-focusBorder);
+}
+.name {
+  font-weight: 600;
+}
+.folder,
+.versions,
+.hint,
+.empty {
+  color: var(--vscode-descriptionForeground);
+}
+.folder,
+.versions {
+  font-size: 0.9em;
+}
+.reason {
+  margin: 4px 0;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+}
+.menu {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+  padding: 4px;
+  background: var(--vscode-menu-background, var(--vscode-editorWidget-background));
+  border: 1px solid var(--vscode-menu-border, var(--vscode-widget-border, transparent));
+}
+.menu button {
+  text-align: left;
+}

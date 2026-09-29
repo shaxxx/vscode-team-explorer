@@ -1,0 +1,393 @@
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server
+  Changeset  : 15661
+  Change     : none
+  Type       : folder
+Server information:
+  Server path  : 
+  Changeset    : 0
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 
+  Type         : 
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\AddApiVersionControllerConvention.cs
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/AddApiVersionControllerConvention.cs
+  Changeset  : 15661
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/AddApiVersionControllerConvention.cs
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : file
+  File type    : utf-8
+  Size         : 837
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\CLAUDE.md
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/CLAUDE.md
+  Changeset  : 20493
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/CLAUDE.md
+  Changeset    : 20493
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 9. travnja 2026. 10:06:48
+  Type         : file
+  File type    : utf-8
+  Size         : 5629
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\CustomDefaultJsonContractResolver.cs
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/CustomDefaultJsonContractResolver.cs
+  Changeset  : 15661
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/CustomDefaultJsonContractResolver.cs
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : file
+  File type    : utf-8
+  Size         : 1152
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\Constants.cs
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/Constants.cs
+  Changeset  : 15661
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/Constants.cs
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : file
+  File type    : utf-8
+  Size         : 624
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\Controllers
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/Controllers
+  Changeset  : 15661
+  Change     : none
+  Type       : folder
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/Controllers
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : folder
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\ConnectionStringResolver.cs
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/ConnectionStringResolver.cs
+  Changeset  : 15661
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/ConnectionStringResolver.cs
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : file
+  File type    : utf-8
+  Size         : 542
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\Extensions
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/Extensions
+  Changeset  : 15661
+  Change     : none
+  Type       : folder
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/Extensions
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : folder
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\AuthServerConfig.cs
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/AuthServerConfig.cs
+  Changeset  : 15661
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/AuthServerConfig.cs
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : file
+  File type    : utf-8
+  Size         : 2409
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\SkippableSerializerContractResolver.cs
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/SkippableSerializerContractResolver.cs
+  Changeset  : 15661
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/SkippableSerializerContractResolver.cs
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : file
+  File type    : utf-8
+  Size         : 4215
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\Enterprise.Till.Server.csproj
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/Enterprise.Till.Server.csproj
+  Changeset  : 19407
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/Enterprise.Till.Server.csproj
+  Changeset    : 19407
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 17. listopada 2025. 8:56:39
+  Type         : file
+  File type    : windows-1250
+  Size         : 5059
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\Enterprise.Till.Server.csproj.vspscc
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/Enterprise.Till.Server.csproj.vspscc
+  Changeset  : 15661
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/Enterprise.Till.Server.csproj.vspscc
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : file
+  File type    : utf-8
+  Size         : 257
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\Enterprise.Till.Server.xml
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/Enterprise.Till.Server.xml
+  Changeset  : 20938
+  Change     : edit
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/Enterprise.Till.Server.xml
+  Changeset    : 20938
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 21. kolovoza 2026. 13:41:55
+  Type         : file
+  File type    : utf-8
+  Size         : 41607
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\appsettings.json
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/appsettings.json
+  Changeset  : 15661
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/appsettings.json
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : file
+  File type    : utf-8
+  Size         : 612
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\Model
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/Model
+  Changeset  : 15661
+  Change     : none
+  Type       : folder
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/Model
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : folder
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\ClaimsProfileService.cs
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/ClaimsProfileService.cs
+  Changeset  : 15661
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/ClaimsProfileService.cs
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : file
+  File type    : utf-8
+  Size         : 3690
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\Program.cs
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/Program.cs
+  Changeset  : 15661
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/Program.cs
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : file
+  File type    : utf-8
+  Size         : 1053
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\ReflectionHelpers.cs
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/ReflectionHelpers.cs
+  Changeset  : 15661
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/ReflectionHelpers.cs
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : file
+  File type    : utf-8
+  Size         : 2032
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\PasswordGrantValidator.cs
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/PasswordGrantValidator.cs
+  Changeset  : 15661
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/PasswordGrantValidator.cs
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : file
+  File type    : utf-8
+  Size         : 3236
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\Startup.cs
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/Startup.cs
+  Changeset  : 18325
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/Startup.cs
+  Changeset    : 18325
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 24. ožujka 2025. 20:02:02
+  Type         : file
+  File type    : utf-8
+  Size         : 12231
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\Swagger
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/Swagger
+  Changeset  : 15661
+  Change     : none
+  Type       : folder
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/Swagger
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : folder
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\GlobalUsings.cs
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/GlobalUsings.cs
+  Changeset  : 15661
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/GlobalUsings.cs
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : file
+  File type    : utf-8
+  Size         : 148
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\Validation
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/Validation
+  Changeset  : 15661
+  Change     : none
+  Type       : folder
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/Validation
+  Changeset    : 15661
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 10. studenog 2023. 8:27:45
+  Type         : folder
+
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\Web
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/Web
+  Changeset  : 18312
+  Change     : none
+  Type       : folder
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/Web
+  Changeset    : 18312
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 21. ožujka 2025. 12:08:14
+  Type         : folder

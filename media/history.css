@@ -1,0 +1,74 @@
+body {
+  margin: 0;
+  padding: 0 12px;
+  color: var(--vscode-foreground);
+  background: var(--vscode-editor-background);
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+}
+#app { display: flex; flex-direction: column; height: 100vh; box-sizing: border-box; padding-bottom: 8px; }
+h1 { font-size: 1.1em; font-weight: 600; margin: 10px 0 8px; }
+h2 { font-size: 1em; font-weight: 600; margin: 0 0 4px; }
+.error { color: var(--vscode-errorForeground); margin: 0 0 8px; white-space: pre-wrap; }
+.hint, .meta { color: var(--vscode-descriptionForeground); margin: 0 0 6px; }
+.grid-wrap { flex: 3 1 0; min-height: 80px; overflow: auto; border: 1px solid var(--vscode-panel-border); }
+table { border-collapse: collapse; width: 100%; }
+.grid { table-layout: fixed; }
+th {
+  position: sticky;
+  top: 0;
+  text-align: left;
+  font-weight: 600;
+  padding: 3px 8px;
+  background: var(--vscode-editor-background);
+  border-bottom: 1px solid var(--vscode-panel-border);
+}
+td { padding: 2px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.grid .id { width: 7ch; text-align: right; }
+.grid .user { width: 14ch; }
+.grid .date { width: 28ch; }
+.grid tbody tr { cursor: default; }
+.grid tbody tr:hover { background: var(--vscode-list-hoverBackground); }
+.grid tbody tr.selected {
+  background: var(--vscode-list-activeSelectionBackground);
+  color: var(--vscode-list-activeSelectionForeground);
+}
+.grid tbody tr:focus { outline: 1px solid var(--vscode-focusBorder); outline-offset: -1px; }
+.footer { padding: 6px 0; min-height: 1.6em; }
+.details { flex: 2 1 0; overflow: auto; border-top: 1px solid var(--vscode-panel-border); padding-top: 8px; }
+.details pre.comment { white-space: pre-wrap; font-family: var(--vscode-font-family); margin: 0 0 8px; }
+.items td.path { white-space: normal; word-break: break-all; }
+.items td.change { width: 18ch; }
+.items td.item-actions { width: 1%; }
+.actions { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+button {
+  font: inherit;
+  color: var(--vscode-button-secondaryForeground);
+  background: var(--vscode-button-secondaryBackground);
+  border: 1px solid var(--vscode-button-border, transparent);
+  padding: 2px 8px;
+  cursor: pointer;
+}
+button:hover { background: var(--vscode-button-secondaryHoverBackground); }
+/* D18a: dims a refusable action instead of disabling it -- it still posts its
+   intent on click, and the extension answers with the model's own refusal. */
+button.dim { opacity: 0.5; }
+.menu {
+  position: fixed;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  padding: 4px 0;
+  background: var(--vscode-menu-background);
+  color: var(--vscode-menu-foreground);
+  border: 1px solid var(--vscode-menu-border, var(--vscode-widget-border, transparent));
+  box-shadow: 0 2px 8px var(--vscode-widget-shadow);
+}
+.menu button { text-align: left; background: transparent; color: inherit; border: none; padding: 4px 16px; }
+.menu button:hover,
+.menu button:focus {
+  background: var(--vscode-menu-selectionBackground);
+  color: var(--vscode-menu-selectionForeground);
+  outline: none;
+}

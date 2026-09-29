@@ -1,0 +1,29 @@
+<Shelvesets>
+  <Shelveset date="2019-05-06T09:33:50.14+02:00" name="__tf_clean_wksp_metadata" owner="Build\00000000-0000-0000-0000-000000000000" ownerdisp="Project Collection Build Service (acme)" owneruniq="Build\00000000-0000-0000-0000-000000000000">
+    <CheckinNote />
+    <Comment>clean last-saved-checkin-metadata</Comment>
+  </Shelveset>
+  <Shelveset date="2026-02-25T15:57:59.653+01:00" name="Popravak web servisa" owner="colleague@example.com" ownerdisp="Colleague" owneruniq="colleague@example.com">
+    <CheckinNote />
+    <Comment>Ažuriranje, Zatvaranje</Comment>
+  </Shelveset>
+  <Shelveset date="2023-12-21T15:17:34.173+01:00" name="CodeReview_2023-12-21_03.15.49.7918" owner="user@example.com" ownerdisp="Filip" owneruniq="user@example.com">
+    <CheckinNote />
+    <Links>
+      <VersionControlLink type="1026" url="vstfs:///WorkItemTracking/WorkItem/1217" />
+    </Links>
+  </Shelveset>
+  <Shelveset date="2026-06-25T15:08:16.967+02:00" name="EF6 Migration 9" owner="user@example.com" ownerdisp="Filip" owneruniq="user@example.com">
+    <CheckinNote />
+    <Comment>EF6 Migration 7</Comment>
+  </Shelveset>
+  <Shelveset date="2024-10-01T09:57:15.143+02:00" name="Assignments uređivanje zaglavlja" owner="user@example.com" ownerdisp="Filip" owneruniq="user@example.com">
+    <CheckinNote />
+    <Comment>Assignments uređivanje zaglavlja</Comment>
+  </Shelveset>
+  <Shelveset date="2026-09-23T13:57:31.84+02:00" name="TFVC-PROBE-P4-1" owner="user@example.com" ownerdisp="Filip" owneruniq="user@example.com">
+    <CheckinNote />
+    <Comment>Probe shelveset čćžšđ
+second line %PATH%</Comment>
+  </Shelveset>
+</Shelvesets>

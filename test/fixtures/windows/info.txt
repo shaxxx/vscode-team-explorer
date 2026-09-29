@@ -1,0 +1,16 @@
+Local information:
+  Local path : C:\work\Deposits\Deposits\frmDeposits.vb
+  Server path: $/Deposits/Deposits/frmDeposits.vb
+  Changeset  : 240
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Deposits/Deposits/frmDeposits.vb
+  Changeset    : 240
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 11. ožujka 2013. 13:52:15
+  Type         : file
+  File type    : windows-1250
+  Size         : 22882

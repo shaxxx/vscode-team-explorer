@@ -1,0 +1,6 @@
+Z:\tmp\tfvc-probe-ws:
+Getting assets
+
+Z:\tmp\tfvc-probe-ws\assets:
+Getting date.js
+Getting smiley.jpg

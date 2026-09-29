@@ -1,0 +1,15 @@
+Pending add: Personnel.Data
+Pending add: Personnel.Model
+Pending add: Customers
+Pending add: Nexus
+
+Customers:
+Pending add: Customers2020
+
+Customers\Customers2020:
+Pending add: Customers.Data
+Pending add: Customers.Model
+
+Nexus:
+Pending add: Nexus.Client
+Pending add: Nexus.Model

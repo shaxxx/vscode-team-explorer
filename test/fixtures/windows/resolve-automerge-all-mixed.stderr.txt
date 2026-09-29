@@ -1,0 +1,3 @@
+The auto merge option is not supported for the conflict on item $/Shop/Shop2023/Enterprise.Till.Server/Program.cs.
+Program.cs: A non version controlled file or writable file by the same name already exists locally.
+Startup.cs: You have a conflicting pending change.

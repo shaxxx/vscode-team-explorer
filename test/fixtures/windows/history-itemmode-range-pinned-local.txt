@@ -1,0 +1,11 @@
+-------------------------------------------------------------------------------
+Changeset: 18544
+User: Boris
+Date: 20. svibnja 2025. 10:07:54
+
+Comment:
+  till_POS (Replies, Requests, Links)
+
+Items:
+  add $/Shop/Shop2023/ShopModel/Till/tillPOSReplies.vb
+

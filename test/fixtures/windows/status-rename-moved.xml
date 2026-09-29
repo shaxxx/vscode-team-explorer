@@ -1,0 +1,7 @@
+<Status>
+  <PendingSet computer="DEVPC" name="TFVC-PROBE-R26" ownerdisp="Filip" owner="11111111-2222-3333-4444-555555555555" owneruniq="11111111-2222-3333-4444-555555555555" ownership="1">
+    <PendingChanges>
+      <PendingChange chgEx="8" chg="Rename" ct="5" date="2026-09-23T12:55:16.637+02:00" enc="1250" hash="G5pPBprhjMyU6v93PEc4xg==" itemid="91813" type="File" len="304" local="C:\Users\user1\AppData\Local\Temp\tfvc-probe-r26\order-kiosk\hello.html" pcid="-567530876" item="$/Shop/Shop2023/Enterprise.Till.Server/Web/order-kiosk/hello.html" srcitem="$/Shop/Shop2023/Enterprise.Till.Server/Web/hello.html" uhash="G5pPBprhjMyU6v93PEc4xg==" ver="18312" psn="TFVC-PROBE-R26" pso="11111111-2222-3333-4444-555555555555" psod="Filip" />
+    </PendingChanges>
+  </PendingSet>
+</Status>

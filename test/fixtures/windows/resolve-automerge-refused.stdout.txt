@@ -1,0 +1,1 @@
+Startup.cs: 0 local, 4 server, 0 both, and 1 conflicting

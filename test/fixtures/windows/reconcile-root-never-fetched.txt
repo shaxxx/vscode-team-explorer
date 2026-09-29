@@ -1,0 +1,9 @@
+order-kiosk:
+Pending add: 3rdpartylicenses.txt
+
+order-kiosk\browser:
+Pending add: favicon.ico
+Pending add: index.html
+Pending add: main-IOOZS2MX.js
+Pending add: polyfills-FFHMD2TL.js
+Pending add: styles-SPNZ5TI6.css

@@ -1,0 +1,16 @@
+Local information:
+  Local path : Z:\home\shax\work\Shop\Shop2023\Distribution\Forms\frmInvoice.vb
+  Server path: $/Shop/Shop2023/Distribution/Forms/frmInvoice.vb
+  Changeset  : 20969
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Distribution/Forms/frmInvoice.vb
+  Changeset    : 20545
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: Tuesday, April 28, 2026 9:32:58 AM
+  Type         : file
+  File type    : utf-8
+  Size         : 76808

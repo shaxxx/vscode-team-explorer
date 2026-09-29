@@ -1,0 +1,41 @@
+{
+  "version": "0.2.0",
+  "inputs": [
+    {
+      "id": "folder",
+      "type": "promptString",
+      "description": "A folder mapped in a TFVC workspace, to open in the Extension Development Host"
+    }
+  ],
+  "configurations": [
+    {
+      "name": "Run Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}", "${input:folder}"],
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "preLaunchTask": "build"
+    },
+    {
+      // Shows the rejected-token message without touching your real token:
+      // TFS_PAT_FILE points the wrapper and the extension at a different file.
+      // Create it first with a token that is certainly invalid, delete it after:
+      //
+      //   Set-Content -NoNewline -Encoding ascii "$env:TEMP\tfvc-bad-pat.txt" `
+      //     'zzzznotarealtokenzzzznotarealtokenzzzznotarealtoken12'
+      //
+      // On Fedora:
+      //
+      //   printf 'zzzznotarealtokenzzzznotarealtokenzzzznotarealtoken12' > /tmp/tfvc-bad-pat.txt
+      "name": "Run Extension (deliberately bad PAT)",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}", "${input:folder}"],
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "preLaunchTask": "build",
+      "windows": { "env": { "TFS_PAT_FILE": "${env:TEMP}\\tfvc-bad-pat.txt" } },
+      "linux": { "env": { "TFS_PAT_FILE": "/tmp/tfvc-bad-pat.txt" } },
+      "osx": { "env": { "TFS_PAT_FILE": "/tmp/tfvc-bad-pat.txt" } }
+    }
+  ]
+}

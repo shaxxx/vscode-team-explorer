@@ -1,0 +1,4 @@
+===============================================================================
+Workspace : Fedora (Filip)
+Collection: https://acme.visualstudio.com/
+ $/: Z:\home\shax\work

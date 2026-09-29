@@ -1,0 +1,1 @@
+Warning Urudzbeni.sln - Unable to perform the get operation because the file already exists locally

@@ -1,0 +1,5 @@
+===============================================================================
+Workspace : DEVPC (Filip)
+Collection: https://acme.visualstudio.com/
+ $/: C:\work
+ $/Vesta/DatabaseFirst/Insight.Database: C:\Users\user1\Downloads\Insight.Database-main\Insight.Database

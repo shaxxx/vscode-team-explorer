@@ -1,0 +1,34 @@
+<!--
+  SYNTHETIC. Neither workspace on either machine has a cloak, so this shape is
+  NOT a capture and must not be treated as one.
+
+  What IS verified, from `tf vc workfold /?` on the real 17.14.37530.1 client:
+
+      tf vc workfold /cloak serverfolder
+                     [/workspace:workspacename] ...
+
+  It takes a server folder and no local folder. So a cloaked entry cannot carry
+  a `local` attribute, which is the property the parser actually relies on.
+
+  The `type="Cloak"` attribute below is the part that is GUESSED — it is what
+  the TFVC client object model's WorkingFolderType implies. The parser treats
+  either signal as disqualifying, so it is correct whichever way the real
+  spelling goes, and the local-attribute guard carries it regardless.
+
+  Everything else here is copied from the real windows/workspaces.xml.
+-->
+<Workspaces>
+  <Workspace computer="DEVPC" name="DEVPC" ownerdisp="Filip" ownerid="REDACTED@example.com" ownertype="Microsoft.IdentityModel.Claims.ClaimsIdentity" owner="00000000-0000-0000-0000-000000000000" owneruniq="00000000-0000-0000-0000-000000000000">
+    <Comment />
+    <Folders>
+      <WorkingFolder local="C:\work" item="$/" />
+      <WorkingFolder item="$/Shop/Shop2023/Distribution/bin" type="Cloak" />
+      <WorkingFolder local="C:\Users\user1\Downloads\Insight.Database-main\Insight.Database" item="$/Vesta/DatabaseFirst/Insight.Database" />
+    </Folders>
+    <LastAccessDate>2026-09-16T08:21:45.403+02:00</LastAccessDate>
+    <OwnerAliases>
+      <string>user@example.com</string>
+      <string>Filip</string>
+    </OwnerAliases>
+  </Workspace>
+</Workspaces>

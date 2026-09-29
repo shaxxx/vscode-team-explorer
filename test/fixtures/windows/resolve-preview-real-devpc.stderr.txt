@@ -1,0 +1,1 @@
+C:\work\OPS\OPS2023\CORE.Api\CORE.Api.xml: You have a conflicting pending change.

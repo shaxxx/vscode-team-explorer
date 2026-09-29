@@ -1,0 +1,77 @@
+-------------------------------------------------------------------------------
+Changeset: 18659
+User: Boris
+Date: Thursday, May 29, 2025 3:05:47 PM
+
+Comment:
+  Teller_ID
+
+Items:
+  edit $/Shop/Shop2023/ShopModel/Till/tillPOSReply.vb
+
+-------------------------------------------------------------------------------
+Changeset: 18617
+User: Filip
+Date: Monday, May 26, 2025 2:42:03 PM
+
+Comment:
+  POS tablice Guid stupac
+
+Items:
+  edit $/Shop/Shop2023/ShopModel/Till/tillPOSReply.vb
+
+-------------------------------------------------------------------------------
+Changeset: 18588
+User: Boris
+Date: Friday, May 23, 2025 10:48:28 AM
+
+Comment:
+  PIN retry limit
+
+Items:
+  edit $/Shop/Shop2023/ShopModel/Till/tillPOSReply.vb
+
+-------------------------------------------------------------------------------
+Changeset: 18558
+User: Boris
+Date: Wednesday, May 21, 2025 10:52:04 AM
+
+Comment:
+  timestamp and Retry
+
+Items:
+  edit $/Shop/Shop2023/ShopModel/Till/tillPOSReply.vb
+
+-------------------------------------------------------------------------------
+Changeset: 18552
+User: Boris
+Date: Tuesday, May 20, 2025 1:12:27 PM
+
+Comment:
+  Reply_ID - NOT NULL, added Request_ID
+
+Items:
+  edit $/Shop/Shop2023/ShopModel/Till/tillPOSReply.vb
+
+-------------------------------------------------------------------------------
+Changeset: 18547
+User: Filip
+Date: Tuesday, May 20, 2025 11:47:43 AM
+
+Comment:
+  EF migracija za POS uređaje
+
+Items:
+  rename, edit $/Shop/Shop2023/ShopModel/Till/tillPOSReply.vb
+
+-------------------------------------------------------------------------------
+Changeset: 18544
+User: Boris
+Date: Tuesday, May 20, 2025 10:07:54 AM
+
+Comment:
+  till_POS (Replies, Requests, Links)
+
+Items:
+  add $/Shop/Shop2023/ShopModel/Till/tillPOSReplies.vb
+

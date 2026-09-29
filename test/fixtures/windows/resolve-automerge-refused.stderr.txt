@@ -1,0 +1,1 @@
+Startup.cs: You have a conflicting pending change.

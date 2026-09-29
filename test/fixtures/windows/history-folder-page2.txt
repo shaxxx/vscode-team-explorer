@@ -1,0 +1,73 @@
+-------------------------------------------------------------------------------
+Changeset: 21016
+User: Filip
+Date: 7. rujna 2026. 8:18:24
+
+Comment:
+  Connection is closed bug fix
+
+Items:
+  edit $/Shop/Shop2023/Distribution/classes/UnobservedTaskExceptionGuard.vb
+  edit $/Shop/Shop2023/Distribution/classes/vmInvoice.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmPaymentMethod.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmTipInsert.vb
+
+-------------------------------------------------------------------------------
+Changeset: 21013
+User: Filip
+Date: 4. rujna 2026. 14:40:19
+
+Comment:
+  Izvoz izvještaja u PDF traži odabir direktorija bug fix
+
+Items:
+  edit $/Shop/Shop2023/Distribution/mdi.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmDiscountOverview.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmLoyaltyCardByReceipt.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmTips.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmDebtPayment.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmTaxOverview.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmReturnableCratesOverview.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmReceiptOverview.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmSoldItems.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmLoyaltyCardTurnover.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmLoyaltyCardBalance.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmTillBalance.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmPeriodBalance.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmPeriodStatus.vb
+
+-------------------------------------------------------------------------------
+Changeset: 20995
+User: Boris
+Date: 1. rujna 2026. 8:09:33
+
+Comment:
+  Nova verzija sustava
+
+Items:
+  edit $/Shop/Shop2023/Distribution/AssemblyInfo.vb
+
+-------------------------------------------------------------------------------
+Changeset: 20993
+User: Filip
+Date: 31. kolovoza 2026. 9:51:56
+
+Comment:
+  Blokiraj UI dok traje spremanje izvještaja
+
+Items:
+  edit $/Shop/Shop2023/Distribution/mdi.vb
+  edit $/Shop/Shop2023/Distribution/classes/SplashManager.vb
+  edit $/Shop/Shop2023/Distribution/Forms/frmTipInsert.vb
+
+-------------------------------------------------------------------------------
+Changeset: 20992
+User: Boris
+Date: 31. kolovoza 2026. 8:45:18
+
+Comment:
+  Nova verzija sustava
+
+Items:
+  edit $/Shop/Shop2023/Distribution/AssemblyInfo.vb
+

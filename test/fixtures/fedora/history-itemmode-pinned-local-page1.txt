@@ -1,0 +1,33 @@
+-------------------------------------------------------------------------------
+Changeset: 18659
+User: Boris
+Date: Thursday, May 29, 2025 3:05:47 PM
+
+Comment:
+  Teller_ID
+
+Items:
+  edit $/Shop/Shop2023/ShopModel/Till/tillPOSReply.vb
+
+-------------------------------------------------------------------------------
+Changeset: 18617
+User: Filip
+Date: Monday, May 26, 2025 2:42:03 PM
+
+Comment:
+  POS tablice Guid stupac
+
+Items:
+  edit $/Shop/Shop2023/ShopModel/Till/tillPOSReply.vb
+
+-------------------------------------------------------------------------------
+Changeset: 18588
+User: Boris
+Date: Friday, May 23, 2025 10:48:28 AM
+
+Comment:
+  PIN retry limit
+
+Items:
+  edit $/Shop/Shop2023/ShopModel/Till/tillPOSReply.vb
+

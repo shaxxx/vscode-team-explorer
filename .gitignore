@@ -1,0 +1,14 @@
+node_modules/
+out/
+dist/
+*.vsix
+.vscode-test/
+
+# Subagent worktrees and local agent state
+.claude/
+
+# Brainstorm mockups (visual companion)
+.superpowers/
+
+# This machine's environment notes (see CLAUDE.md). Never committed.
+LOCAL.md

@@ -1,0 +1,4 @@
+===============================================================================
+Workspace : TFVC-PROBE-FEDORA (Filip)
+Collection: https://acme.visualstudio.com/
+ $/Shop/Shop2023/Enterprise.Till.Server/Web/order-kiosk: Z:\tmp\tfvc-probe-ws\assets

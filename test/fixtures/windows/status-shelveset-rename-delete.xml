@@ -1,0 +1,10 @@
+<Status>
+  <PendingSet name="TFVC-PROBE-P4-2" ownerdisp="Filip" owner="00000000-0000-0000-0000-000000000000" owneruniq="00000000-0000-0000-0000-000000000000" ownership="1" type="Shelveset">
+    <PendingChanges>
+      <PendingChange chgEx="2" chg="Edit" ct="5" date="2026-09-23T13:57:29.4+02:00" enc="1250" hash="G5pPBprhjMyU6v93PEc4xg==" itemid="91813" type="File" len="304" pcid="-567531387" item="$/Shop/Shop2023/Enterprise.Till.Server/Web/hello.html" uhash="1mcjSduoKZqA47MyIC37fg==" ver="18312" psn="TFVC-PROBE-P4-2" pso="00000000-0000-0000-0000-000000000000" psod="Filip" ins="true" />
+      <PendingChange chgEx="7" chg="Add Edit Encoding" ct="5" date="2026-09-23T13:58:04.097+02:00" enc="1250" itemid="-1027" type="File" pcid="-567531388" item="$/Shop/Shop2023/Enterprise.Till.Server/Web/probe-new2.txt" uhash="U7nmLInoJfdpkgwlTy+5pQ==" psn="TFVC-PROBE-P4-2" pso="00000000-0000-0000-0000-000000000000" psod="Filip" ins="true" />
+      <PendingChange chgEx="8" chg="Rename" ct="5" date="2026-09-23T13:58:01.117+02:00" enc="65001" hash="qiWcEEenCk7jIh5KJtCJ3g==" itemid="91814" type="File" len="90" pcid="-567531389" item="$/Shop/Shop2023/Enterprise.Till.Server/Web/assets/date2.js" srcitem="$/Shop/Shop2023/Enterprise.Till.Server/Web/assets/date.js" uhash="qiWcEEenCk7jIh5KJtCJ3g==" ver="18312" psn="TFVC-PROBE-P4-2" pso="00000000-0000-0000-0000-000000000000" psod="Filip" ins="true" />
+      <PendingChange chgEx="16" chg="Delete" ct="5" date="2026-09-23T13:58:02.727+02:00" enc="-1" hash="mAHBWmHiCMgajMG04pbe8A==" itemid="91815" type="File" len="118788" pcid="-567531390" item="$/Shop/Shop2023/Enterprise.Till.Server/Web/assets/smiley.jpg" uhash="mAHBWmHiCMgajMG04pbe8A==" ver="18312" psn="TFVC-PROBE-P4-2" pso="00000000-0000-0000-0000-000000000000" psod="Filip" ins="true" />
+    </PendingChanges>
+  </PendingSet>
+</Status>

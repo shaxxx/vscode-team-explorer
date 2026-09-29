@@ -1,0 +1,1 @@
+C:\Users\user1\AppData\Local\Temp\claude\c--Users-user1-source-repos-vscode-tfvc\aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\scratchpad\p5-Urudžbeni zapisnik\Urudzbeni.sln: A non version controlled file or writable file by the same name already exists locally.

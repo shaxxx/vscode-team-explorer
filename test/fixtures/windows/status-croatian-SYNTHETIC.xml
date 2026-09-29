@@ -1,0 +1,8 @@
+<Status>
+  <PendingSet computer="DEVPC" name="DEVPC" ownerdisp="Filip" owner="00000000-0000-0000-0000-000000000000" owneruniq="00000000-0000-0000-0000-000000000000" ownership="1">
+    <PendingChanges>
+      <PendingChange chgEx="2" chg="Edit" ct="5" date="2026-07-27T14:38:43.17+02:00" enc="1250" hash="xguHv2CPLOPMAclhto7kzQ==" itemid="152732" type="File" len="6986" local="C:\work\Urudžbeni zapisnik\Urudzbeni\Šifarnik\Račun–Ćirilica.vb" pcid="-566347414" item="$/Urudžbeni zapisnik/Urudzbeni/Šifarnik/Račun–Ćirilica.vb" uhash="xguHv2CPLOPMAclhto7kzQ==" ver="20783" psn="DEVPC" pso="00000000-0000-0000-0000-000000000000" psod="Filip" />
+      <PendingChange chgEx="7" chg="Add Edit Encoding" ct="5" date="2026-05-06T20:33:38.003+02:00" enc="65001" itemid="-328662" type="File" local="C:\work\Đakovo\čćžšđ ČĆŽŠĐ.txt" pcid="-566347380" item="$/Đakovo/čćžšđ ČĆŽŠĐ.txt" psn="DEVPC" pso="00000000-0000-0000-0000-000000000000" psod="Filip" />
+    </PendingChanges>
+  </PendingSet>
+</Status>

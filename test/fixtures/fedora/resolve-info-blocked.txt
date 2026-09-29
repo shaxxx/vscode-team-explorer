@@ -1,0 +1,16 @@
+Local information:
+  Local path : 
+  Server path: 
+  Changeset  : 0
+  Change     : none
+  Type       : 
+Server information:
+  Server path  : $/Urudžbeni zapisnik/Urudzbeni.sln
+  Changeset    : 14353
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: Thursday, December 8, 2022 8:45:36 AM
+  Type         : file
+  File type    : utf-8
+  Size         : 4215

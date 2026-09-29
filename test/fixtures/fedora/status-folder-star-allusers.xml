@@ -1,0 +1,23 @@
+<Status>
+  <PendingSet computer="DEVPC" name="DEVPC" ownerdisp="Filip" owner="00000000-0000-0000-0000-000000000000" owneruniq="00000000-0000-0000-0000-000000000000" ownership="1">
+    <PendingChanges>
+      <PendingChange chgEx="2" chg="Edit" ct="5" date="2026-08-21T14:11:01.01+02:00" enc="65001" hash="HmwP26hD7C/stAk2nN1Fyg==" itemid="80611" type="File" len="41607" local="C:\work\Shop\Shop2023\Enterprise.Till.Server\Enterprise.Till.Server.xml" pcid="-566868102" item="$/Shop/Shop2023/Enterprise.Till.Server/Enterprise.Till.Server.xml" uhash="HmwP26hD7C/stAk2nN1Fyg==" ver="20938" psn="DEVPC" pso="00000000-0000-0000-0000-000000000000" psod="Filip" />
+    </PendingChanges>
+  </PendingSet>
+  <PendingSet computer="BORIS" name="BORIS" ownerdisp="Boris" owner="00000000-0000-0000-0000-000000000000" owneruniq="00000000-0000-0000-0000-000000000000" ownership="2">
+    <PendingChanges>
+      <PendingChange chgEx="2" chg="Edit" ct="5" date="2025-11-03T09:23:19.243+01:00" enc="65001" hash="SuOaClBuULqnmapNJgR/Dw==" itemid="80609" type="File" len="257" local="C:\Work\Shop\Shop2023\Enterprise.Till.Server\Enterprise.Till.Server.csproj.vspscc" pcid="-559517388" item="$/Shop/Shop2023/Enterprise.Till.Server/Enterprise.Till.Server.csproj.vspscc" uhash="SuOaClBuULqnmapNJgR/Dw==" ver="15661" psn="BORIS" pso="00000000-0000-0000-0000-000000000000" psod="Boris" />
+      <PendingChange chgEx="2" chg="Edit" ct="5" date="2026-08-24T08:18:40.32+02:00" enc="65001" hash="HmwP26hD7C/stAk2nN1Fyg==" itemid="80611" type="File" len="41607" local="C:\Work\Shop\Shop2023\Enterprise.Till.Server\Enterprise.Till.Server.xml" pcid="-566872271" item="$/Shop/Shop2023/Enterprise.Till.Server/Enterprise.Till.Server.xml" uhash="HmwP26hD7C/stAk2nN1Fyg==" ver="20938" psn="BORIS" pso="00000000-0000-0000-0000-000000000000" psod="Boris" />
+    </PendingChanges>
+  </PendingSet>
+  <PendingSet computer="IVAN" name="IVAN" ownerdisp="Ivan" owner="00000000-0000-0000-0000-000000000000" owneruniq="00000000-0000-0000-0000-000000000000" ownership="2">
+    <PendingChanges>
+      <PendingChange chgEx="2" chg="Edit" ct="5" date="2025-03-25T08:58:20.607+01:00" enc="65001" hash="J+v7qyAulbDUUAglVZj5Uw==" itemid="80611" type="File" len="42144" local="C:\Workspace\Shop\Shop2023\Enterprise.Till.Server\Enterprise.Till.Server.xml" pcid="-554644916" item="$/Shop/Shop2023/Enterprise.Till.Server/Enterprise.Till.Server.xml" uhash="J+v7qyAulbDUUAglVZj5Uw==" ver="18329" psn="IVAN" pso="00000000-0000-0000-0000-000000000000" psod="Ivan" />
+    </PendingChanges>
+  </PendingSet>
+  <PendingSet computer="ZORAN" name="ZORAN" ownerdisp="Zoran" owner="00000000-0000-0000-0000-000000000000" owneruniq="00000000-0000-0000-0000-000000000000" ownership="2">
+    <PendingChanges>
+      <PendingChange chgEx="2" chg="Edit" ct="5" date="2025-01-16T10:05:21.443+01:00" enc="65001" hash="nFnqfoCvlStEsE9FUBe3ng==" itemid="80611" type="File" len="40728" local="c:\work\Shop\Shop2023\Enterprise.Till.Server\Enterprise.Till.Server.xml" pcid="-553386142" item="$/Shop/Shop2023/Enterprise.Till.Server/Enterprise.Till.Server.xml" uhash="nFnqfoCvlStEsE9FUBe3ng==" ver="17726" psn="ZORAN" pso="00000000-0000-0000-0000-000000000000" psod="Zoran" />
+    </PendingChanges>
+  </PendingSet>
+</Status>

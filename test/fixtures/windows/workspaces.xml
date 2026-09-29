@@ -1,0 +1,15 @@
+<Workspaces>
+  <Workspace computer="DEVPC" name="DEVPC" ownerdisp="Filip" ownerid="REDACTED@example.com" ownertype="Microsoft.IdentityModel.Claims.ClaimsIdentity" owner="00000000-0000-0000-0000-000000000000" owneruniq="00000000-0000-0000-0000-000000000000">
+    <Comment />
+    <Folders>
+      <WorkingFolder local="C:\work" item="$/" />
+      <WorkingFolder local="C:\Users\user1\Downloads\Insight.Database-main\Insight.Database" item="$/Vesta/DatabaseFirst/Insight.Database" />
+    </Folders>
+    <LastAccessDate>2026-09-16T08:21:45.403+02:00</LastAccessDate>
+    <OwnerAliases>
+      <string>user@example.com</string>
+      <string>user@example.com</string>
+      <string>Filip</string>
+    </OwnerAliases>
+  </Workspace>
+</Workspaces>

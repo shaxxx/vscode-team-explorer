@@ -1,0 +1,12 @@
+#!/bin/sh
+# tfp-flatpak - for VS Code installed as a Flatpak (com.visualstudio.code).
+#
+# Wine is not available inside the Flatpak sandbox, so running ~/bin/tfp from
+# there fails with exit code 127. This shim runs it on the host instead.
+#
+#   cp wrappers/tfp-flatpak ~/bin/tfp-flatpak && chmod +x ~/bin/tfp-flatpak
+#   then set "teamExplorer.wrapperPath" to the shim's full path.
+#
+# It needs the Flatpak's permission to talk to the host
+# (org.freedesktop.Flatpak), which the VS Code Flatpak has.
+exec flatpak-spawn --host "$HOME/bin/tfp" "$@"

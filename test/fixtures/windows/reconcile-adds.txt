@@ -1,0 +1,153 @@
+OPS\OPS2013\Inventory:
+Pending add: Connected Services
+Pending add: Dialogs
+Pending add: DX
+Pending add: FodyWeavers.xsd
+Pending add: Forms
+
+OPS\OPS2013\Inventory\Classes:
+Pending add: GridViewWithIcons
+
+OPS\OPS2013\Goods:
+Pending add: FodyWeavers.xsd
+
+OPS\OPS2013\Hospitality:
+Pending add: Dialogs
+Pending add: DX
+Pending add: FodyWeavers.xsd
+Pending add: Forms
+
+OPS\OPS2013\Hospitality\Classes:
+Pending add: GridViewWithIcons
+
+OPS\OPS2023:
+Pending add: .claude
+Pending add: .code-review-graph
+Pending add: .code-review-graphignore
+Pending add: .gitignore
+Pending add: .vscode
+Pending add: db
+Pending add: manual
+Pending add: scripts
+Pending add: temp_query.sql
+Pending add: temp_query_filtered.sql
+
+OPS\OPS2023\.claude:
+Pending add: settings.local.json
+
+OPS\OPS2023\.code-review-graph:
+Pending add: .gitignore
+Pending add: graph.db
+
+OPS\OPS2023\.vscode:
+Pending add: launch.json
+Pending add: settings.json
+Pending add: tasks.json
+
+OPS\OPS2023\db:
+Pending add: recalc-outputs
+
+OPS\OPS2023\db\recalc-outputs:
+Pending add: backup_ops_calibration_original.sql
+Pending add: fix_ops_calibration_matrix_leak.sql
+Pending add: ops_Recalc_PurchaseValues_ExistsLater.sql
+Pending add: ops_Recalc_PurchaseValues_Snapshots.sql
+Pending add: test_preview_rollback_ig40.sql
+Pending add: test_ops_calibration_matrix_leak.sql
+
+OPS\OPS2023\docs:
+Pending add: business_rule_lock_shipping_docs.md
+Pending add: Retail_Adjustments_Discounts_and_Pricing.md
+Pending add: catalog_items.md
+Pending add: plans
+Pending add: goods_inventory.md
+Pending add: planning
+Pending add: stock_costing_notes.md
+
+OPS\OPS2023\docs\plans:
+Pending add: 2026-03-10-smart-tagging-design.md
+Pending add: 2026-03-10-smart-tagging-implementation-plan.md
+Pending add: 2026-04-08-inline-help-design.md
+Pending add: 2026-04-08-inline-help-implementation-plan.md
+
+OPS\OPS2023\docs\planning:
+Pending add: plans
+Pending add: specs
+
+OPS\OPS2023\docs\planning\plans:
+Pending add: 2026-06-27-recalc-outgoing-purchase-values.md
+Pending add: 2026-06-29-recalc-outputs-rebase-on-calibration.md
+
+OPS\OPS2023\docs\planning\specs:
+Pending add: 2026-06-27-recalc-outgoing-purchase-values-design.md
+Pending add: 2026-06-29-recalc-outputs-rebase-on-calibration-design.md
+
+OPS\OPS2023\manual:
+Pending add: master-plan.md
+Pending add: master-spec.md
+Pending add: poc
+
+OPS\OPS2023\manual\poc:
+Pending add: roslyn-extraction
+
+OPS\OPS2023\manual\poc\roslyn-extraction:
+Pending add: generated
+Pending add: Manual.RoslynExtraction.Poc.slnx
+Pending add: README.md
+Pending add: src
+Pending add: tests
+
+OPS\OPS2023\manual\poc\roslyn-extraction\generated:
+Pending add: goods-extraction.json
+
+OPS\OPS2023\manual\poc\roslyn-extraction\src:
+Pending add: Manual.RoslynExtraction
+Pending add: Manual.RoslynExtraction.Cli
+
+OPS\OPS2023\manual\poc\roslyn-extraction\src\Manual.RoslynExtraction:
+Pending add: ExtractionModels.cs
+Pending add: Manual.RoslynExtraction.csproj
+Pending add: VbUiExtractor.cs
+
+OPS\OPS2023\manual\poc\roslyn-extraction\src\Manual.RoslynExtraction.Cli:
+Pending add: Manual.RoslynExtraction.Cli.csproj
+Pending add: Program.cs
+
+OPS\OPS2023\manual\poc\roslyn-extraction\tests:
+Pending add: Manual.RoslynExtraction.Tests
+
+OPS\OPS2023\manual\poc\roslyn-extraction\tests\Manual.RoslynExtraction.Tests:
+Pending add: Manual.RoslynExtraction.Tests.csproj
+Pending add: VbUiExtractorTests.cs
+
+OPS\OPS2023\Inventory:
+Pending add: FodyWeavers.xsd
+
+OPS\OPS2023\Goods:
+Pending add: FodyWeavers.xsd
+Pending add: GuideFlyoutPanel.Designer.vb
+Pending add: GuideFlyoutPanel.resx
+Pending add: GuideFlyoutPanel.vb
+Pending add: navigationButton.png
+Pending add: Goods.vbproj.bak
+
+OPS\OPS2023\scripts:
+Pending add: search
+
+OPS\OPS2023\scripts\search:
+Pending add: vectorstore
+Pending add: schema
+Pending add: sql_ingest
+Pending add: text_chunker
+
+OPS\OPS2023\scripts\search\sql_ingest:
+Pending add: SqlIngest
+
+OPS\OPS2023\scripts\search\text_chunker:
+Pending add: TextChunker
+
+OPS\OPS2023\scripts\search\text_chunker\TextChunker:
+Pending add: Extractors
+
+OPS\OPS2023\Hospitality:
+Pending add: FodyWeavers.xsd

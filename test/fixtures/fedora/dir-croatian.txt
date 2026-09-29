@@ -1,0 +1,9 @@
+$/Urudžbeni zapisnik:
+$ForeignIdSignTool
+$OcrToolkitNET472
+$Urudzbeni
+$Urudzbeni.Sandbox
+$Urudzbeni.REGIT
+Urudzbeni.sln
+
+6 item(s)

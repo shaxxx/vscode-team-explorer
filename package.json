@@ -1,0 +1,666 @@
+{
+  "name": "teamExplorer",
+  "displayName": "Team Explorer (TFVC)",
+  "description": "Team Explorer-style TFVC for VS Code, on Windows and on Linux under Wine. Not affiliated with Microsoft.",
+  "publisher": "integrator",
+  "version": "1.0.0",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shaxxx/vscode-team-explorer.git"
+  },
+  "homepage": "https://github.com/shaxxx/vscode-team-explorer#readme",
+  "bugs": {
+    "url": "https://github.com/shaxxx/vscode-team-explorer/issues"
+  },
+  "keywords": [
+    "tfvc",
+    "tfs",
+    "team foundation",
+    "azure devops",
+    "source control",
+    "visual studio"
+  ],
+  "engines": {
+    "vscode": "^1.100.0",
+    "node": ">=20"
+  },
+  "categories": [
+    "SCM Providers"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onWebviewPanel:teamExplorer.sourceControlExplorer",
+    "onWebviewPanel:teamExplorer.shelvesets"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "teamExplorer.checkout",
+        "title": "Check Out for Edit",
+        "category": "Team Explorer",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "teamExplorer.undo",
+        "title": "Undo Pending Changes",
+        "category": "Team Explorer",
+        "icon": "$(discard)"
+      },
+      {
+        "command": "teamExplorer.getLatest",
+        "title": "Get Latest Version",
+        "category": "Team Explorer"
+      },
+      {
+        "command": "teamExplorer.add",
+        "title": "Add to Source Control",
+        "category": "Team Explorer",
+        "icon": "$(add)"
+      },
+      {
+        "command": "teamExplorer.refresh",
+        "title": "Refresh",
+        "category": "Team Explorer",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "teamExplorer.compareWithLatest",
+        "title": "Compare with Latest Version",
+        "category": "Team Explorer",
+        "icon": "$(compare-changes)"
+      },
+      {
+        "command": "teamExplorer.checkForServerChanges",
+        "title": "Check for Server Changes",
+        "category": "Team Explorer"
+      },
+      {
+        "command": "teamExplorer.setPat",
+        "title": "Set Personal Access Token",
+        "category": "Team Explorer"
+      },
+      {
+        "command": "teamExplorer.checkInFromButton",
+        "title": "Check In",
+        "icon": "$(check)"
+      },
+      {
+        "command": "teamExplorer.exclude",
+        "title": "Exclude from Check-in",
+        "category": "Team Explorer",
+        "icon": "$(remove)"
+      },
+      {
+        "command": "teamExplorer.include",
+        "title": "Include in Check-in",
+        "category": "Team Explorer",
+        "icon": "$(add)"
+      },
+      {
+        "command": "teamExplorer.viewHistory",
+        "title": "View History",
+        "category": "Team Explorer",
+        "icon": "$(history)"
+      },
+      {
+        "command": "teamExplorer.showChangeset",
+        "title": "Show Changeset Details",
+        "category": "Team Explorer"
+      },
+      {
+        "command": "teamExplorer.compareVersions",
+        "title": "Compare Versions",
+        "category": "Team Explorer"
+      },
+      {
+        "command": "teamExplorer.annotate",
+        "title": "Annotate",
+        "category": "Team Explorer"
+      },
+      {
+        "command": "teamExplorer.hideAnnotations",
+        "title": "Hide Annotations",
+        "category": "Team Explorer"
+      },
+      {
+        "command": "teamExplorer.manageWorkspace",
+        "title": "Manage Workspace",
+        "category": "Team Explorer"
+      },
+      {
+        "command": "teamExplorer.openExplorer",
+        "title": "Source Control Explorer",
+        "category": "Team Explorer",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "teamExplorer.showInExplorer",
+        "title": "Show in Source Control Explorer",
+        "category": "Team Explorer"
+      },
+      {
+        "command": "teamExplorer.viewVersion",
+        "title": "View Server Version",
+        "category": "Team Explorer"
+      },
+      {
+        "command": "teamExplorer.mapServerFolder",
+        "title": "Map Server Folder to Local Folder",
+        "category": "Team Explorer"
+      },
+      {
+        "command": "teamExplorer.renameItem",
+        "title": "Rename",
+        "category": "Team Explorer"
+      },
+      {
+        "command": "teamExplorer.deleteItems",
+        "title": "Delete",
+        "category": "Team Explorer"
+      },
+      {
+        "command": "teamExplorer.shelve",
+        "title": "Shelve…",
+        "category": "Team Explorer",
+        "icon": "$(archive)"
+      },
+      {
+        "command": "teamExplorer.findShelvesets",
+        "title": "Find Shelvesets",
+        "category": "Team Explorer"
+      },
+      {
+        "command": "teamExplorer.showConflicts",
+        "title": "Resolve Conflicts",
+        "category": "Team Explorer"
+      },
+      {
+        "command": "teamExplorer.resolveConflicts",
+        "title": "Resolve Conflicts (after Unshelve)",
+        "category": "Team Explorer"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "teamExplorer.explorer",
+        "label": "Team Explorer"
+      }
+    ],
+    "menus": {
+      "scm/title": [
+        {
+          "command": "teamExplorer.checkInFromButton",
+          "when": "scmProvider == teamExplorer",
+          "group": "navigation@1"
+        },
+        {
+          "command": "teamExplorer.refresh",
+          "when": "scmProvider == teamExplorer",
+          "group": "navigation@2"
+        },
+        {
+          "command": "teamExplorer.openExplorer",
+          "when": "scmProvider == teamExplorer && teamExplorer:enabled",
+          "group": "navigation@3"
+        },
+        {
+          "command": "teamExplorer.shelve",
+          "when": "scmProvider == teamExplorer && teamExplorer:enabled",
+          "group": "navigation@1.5"
+        },
+        {
+          "command": "teamExplorer.findShelvesets",
+          "when": "scmProvider == teamExplorer && teamExplorer:enabled",
+          "group": "2_shelvesets@1"
+        },
+        {
+          "command": "teamExplorer.showConflicts",
+          "when": "scmProvider == teamExplorer && teamExplorer:enabled",
+          "group": "2_conflicts@1"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "teamExplorer.checkInFromButton",
+          "when": "false"
+        },
+        {
+          "command": "teamExplorer.exclude",
+          "when": "false"
+        },
+        {
+          "command": "teamExplorer.include",
+          "when": "false"
+        },
+        {
+          "command": "teamExplorer.checkout",
+          "when": "teamExplorer:enabled"
+        },
+        {
+          "command": "teamExplorer.undo",
+          "when": "teamExplorer:enabled"
+        },
+        {
+          "command": "teamExplorer.getLatest",
+          "when": "teamExplorer:enabled"
+        },
+        {
+          "command": "teamExplorer.add",
+          "when": "teamExplorer:enabled"
+        },
+        {
+          "command": "teamExplorer.refresh",
+          "when": "teamExplorer:enabled"
+        },
+        {
+          "command": "teamExplorer.compareWithLatest",
+          "when": "teamExplorer:enabled"
+        },
+        {
+          "command": "teamExplorer.checkForServerChanges",
+          "when": "false"
+        },
+        {
+          "command": "teamExplorer.viewHistory",
+          "when": "teamExplorer:enabled"
+        },
+        {
+          "command": "teamExplorer.showChangeset",
+          "when": "false"
+        },
+        {
+          "command": "teamExplorer.compareVersions",
+          "when": "false"
+        },
+        {
+          "command": "teamExplorer.annotate",
+          "when": "teamExplorer:enabled && !teamExplorer.annotated"
+        },
+        {
+          "command": "teamExplorer.hideAnnotations",
+          "when": "teamExplorer.annotated"
+        },
+        {
+          "command": "teamExplorer.openExplorer",
+          "when": "teamExplorer:enabled"
+        },
+        {
+          "command": "teamExplorer.showInExplorer",
+          "when": "teamExplorer:enabled"
+        },
+        {
+          "command": "teamExplorer.viewVersion",
+          "when": "false"
+        },
+        {
+          "command": "teamExplorer.mapServerFolder",
+          "when": "false"
+        },
+        {
+          "command": "teamExplorer.renameItem",
+          "when": "false"
+        },
+        {
+          "command": "teamExplorer.deleteItems",
+          "when": "false"
+        },
+        {
+          "command": "teamExplorer.shelve",
+          "when": "teamExplorer:enabled"
+        },
+        {
+          "command": "teamExplorer.findShelvesets",
+          "when": "teamExplorer:enabled"
+        },
+        {
+          "command": "teamExplorer.showConflicts",
+          "when": "teamExplorer:enabled"
+        },
+        {
+          "command": "teamExplorer.resolveConflicts",
+          "when": "false"
+        }
+      ],
+      "scm/resourceState/context": [
+        {
+          "command": "teamExplorer.add",
+          "when": "scmProvider == teamExplorer && scmResourceGroup == notInSourceControl",
+          "group": "inline@1"
+        },
+        {
+          "command": "teamExplorer.add",
+          "when": "scmProvider == teamExplorer && scmResourceGroup == notInSourceControl",
+          "group": "1_modification@1"
+        },
+        {
+          "command": "teamExplorer.exclude",
+          "when": "scmProvider == teamExplorer && scmResourceGroup == included",
+          "group": "inline@1"
+        },
+        {
+          "command": "teamExplorer.include",
+          "when": "scmProvider == teamExplorer && scmResourceGroup == excluded",
+          "group": "inline@1"
+        },
+        {
+          "command": "teamExplorer.undo",
+          "when": "scmProvider == teamExplorer && scmResourceGroup != notInSourceControl",
+          "group": "inline@2"
+        },
+        {
+          "command": "teamExplorer.compareWithLatest",
+          "when": "scmProvider == teamExplorer && scmResourceState == checkedOut",
+          "group": "1_modification@1"
+        },
+        {
+          "command": "teamExplorer.checkout",
+          "when": "scmProvider == teamExplorer && scmResourceState == pendingRename",
+          "group": "1_modification@2"
+        },
+        {
+          "command": "teamExplorer.undo",
+          "when": "scmProvider == teamExplorer && scmResourceGroup != notInSourceControl",
+          "group": "1_modification@3"
+        },
+        {
+          "command": "teamExplorer.exclude",
+          "when": "scmProvider == teamExplorer && scmResourceGroup == included",
+          "group": "2_exclude@1"
+        },
+        {
+          "command": "teamExplorer.include",
+          "when": "scmProvider == teamExplorer && scmResourceGroup == excluded",
+          "group": "2_exclude@1"
+        },
+        {
+          "command": "teamExplorer.viewHistory",
+          "when": "scmProvider == teamExplorer && scmResourceState =~ /^(checkedOut|pendingDelete)$/",
+          "group": "3_history@1"
+        },
+        {
+          "command": "teamExplorer.showConflicts",
+          "when": "scmProvider == teamExplorer && scmResourceGroup == conflicts",
+          "group": "1_modification@4"
+        }
+      ],
+      "scm/resourceFolder/context": [
+        {
+          "command": "teamExplorer.add",
+          "when": "scmProvider == teamExplorer && scmResourceGroup == notInSourceControl",
+          "group": "1_modification@1"
+        },
+        {
+          "command": "teamExplorer.exclude",
+          "when": "scmProvider == teamExplorer && scmResourceGroup == included",
+          "group": "2_exclude@1"
+        },
+        {
+          "command": "teamExplorer.include",
+          "when": "scmProvider == teamExplorer && scmResourceGroup == excluded",
+          "group": "2_exclude@1"
+        }
+      ],
+      "explorer/context": [
+        {
+          "submenu": "teamExplorer.explorer",
+          "when": "teamExplorer:enabled",
+          "group": "7_modification"
+        }
+      ],
+      "teamExplorer.explorer": [
+        {
+          "command": "teamExplorer.checkout",
+          "group": "1_edit@1"
+        },
+        {
+          "command": "teamExplorer.undo",
+          "group": "1_edit@2"
+        },
+        {
+          "command": "teamExplorer.getLatest",
+          "group": "2_server@1"
+        },
+        {
+          "command": "teamExplorer.compareWithLatest",
+          "when": "!explorerResourceIsFolder",
+          "group": "2_server@2"
+        },
+        {
+          "command": "teamExplorer.add",
+          "group": "3_add@1"
+        },
+        {
+          "command": "teamExplorer.viewHistory",
+          "group": "4_history@1"
+        },
+        {
+          "command": "teamExplorer.annotate",
+          "when": "!explorerResourceIsFolder",
+          "group": "4_history@2"
+        },
+        {
+          "command": "teamExplorer.showInExplorer",
+          "group": "5_explorer@1"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "teamExplorer.checkout",
+          "when": "teamExplorer:enabled && resourceScheme == file && teamExplorer.activeFileState =~ /^(versioned|writableNotCheckedOut|unknown|pendingRename)$/",
+          "group": "teamExplorer@1"
+        },
+        {
+          "command": "teamExplorer.compareWithLatest",
+          "when": "teamExplorer:enabled && resourceScheme == file && teamExplorer.activeFileState == checkedOut",
+          "group": "teamExplorer@2"
+        },
+        {
+          "command": "teamExplorer.checkForServerChanges",
+          "when": "teamExplorer:enabled && resourceScheme == file && teamExplorer.activeFileState =~ /^(versioned|writableNotCheckedOut|unknown)$/",
+          "group": "teamExplorer@2"
+        },
+        {
+          "command": "teamExplorer.viewHistory",
+          "when": "teamExplorer:enabled && resourceScheme == file && teamExplorer.activeFileState =~ /^(versioned|checkedOut|writableNotCheckedOut|unknown)$/",
+          "group": "teamExplorer@3"
+        },
+        {
+          "command": "teamExplorer.annotate",
+          "when": "teamExplorer:enabled && resourceScheme == file && teamExplorer.activeFileState =~ /^(versioned|checkedOut|writableNotCheckedOut|unknown)$/ && !teamExplorer.annotated",
+          "group": "teamExplorer@4"
+        },
+        {
+          "command": "teamExplorer.hideAnnotations",
+          "when": "teamExplorer:enabled && resourceScheme == file && teamExplorer.annotated",
+          "group": "teamExplorer@4"
+        },
+        {
+          "command": "teamExplorer.showInExplorer",
+          "when": "teamExplorer:enabled && resourceScheme == file && teamExplorer.activeFileState =~ /^(versioned|checkedOut|writableNotCheckedOut|unknown)$/",
+          "group": "teamExplorer@5"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "teamExplorer",
+          "title": "Team Explorer",
+          "icon": "media/team-explorer.svg"
+        }
+      ]
+    },
+    "views": {
+      "teamExplorer": [
+        {
+          "id": "teamExplorer.home",
+          "name": "Home",
+          "when": "config.teamExplorer.showActivityBar && teamExplorer:enabled"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "teamExplorer.home",
+        "contents": "[Source Control Explorer](command:teamExplorer.openExplorer)\n[Pending Changes](command:workbench.view.scm)\n[Manage Workspace](command:teamExplorer.manageWorkspace)"
+      }
+    ],
+    "colors": [
+      {
+        "id": "teamExplorer.versionedForeground",
+        "description": "Color of the lock badge shown on a file that is under TFVC source control.",
+        "defaults": {
+          "light": "descriptionForeground",
+          "dark": "descriptionForeground",
+          "highContrast": "descriptionForeground"
+        }
+      },
+      {
+        "id": "teamExplorer.checkedOutForeground",
+        "description": "Color of the check-mark badge shown on a file checked out for edit, and of the arrow badge shown on a pending rename.",
+        "defaults": {
+          "light": "charts.orange",
+          "dark": "charts.orange",
+          "highContrast": "charts.orange"
+        }
+      },
+      {
+        "id": "teamExplorer.addedForeground",
+        "description": "Color of the plus badge shown on a file added to source control but not yet checked in.",
+        "defaults": {
+          "light": "charts.green",
+          "dark": "charts.green",
+          "highContrast": "charts.green"
+        }
+      },
+      {
+        "id": "teamExplorer.deletedForeground",
+        "description": "Color of the minus badge shown on a file pending deletion.",
+        "defaults": {
+          "light": "charts.red",
+          "dark": "charts.red",
+          "highContrast": "charts.red"
+        }
+      },
+      {
+        "id": "teamExplorer.hazardForeground",
+        "description": "Color of the warning badge shown on a file that is writable but not checked out for edit, so the change may be lost.",
+        "defaults": {
+          "light": "errorForeground",
+          "dark": "errorForeground",
+          "highContrast": "errorForeground"
+        }
+      },
+      {
+        "id": "teamExplorer.excludedForeground",
+        "description": "Color of a badge on a file that has been deliberately excluded from the next check-in. The badge letter itself is unchanged -- only its color dims -- because the file's state has not changed, only its fate at the next check-in.",
+        "defaults": {
+          "light": "disabledForeground",
+          "dark": "disabledForeground",
+          "highContrast": "disabledForeground"
+        }
+      }
+    ],
+    "configuration": {
+      "title": "Team Explorer (TFVC)",
+      "properties": {
+        "teamExplorer.wrapperPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the tfp wrapper. Empty means ~/bin/tfp.cmd on Windows and ~/bin/tfp on Linux. See the install guide.",
+          "scope": "machine"
+        },
+        "teamExplorer.collectionUrl": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Your TFVC collection URL, for example `https://dev.azure.com/your-org/` or `https://your-org.visualstudio.com/`. Required: TFVC stays off until it is set. Reload the window after changing it."
+        },
+        "teamExplorer.autoCheckout": {
+          "type": "string",
+          "enum": [
+            "onEdit",
+            "onSave",
+            "disabled"
+          ],
+          "default": "onEdit",
+          "description": "When to automatically check out a file for editing."
+        },
+        "teamExplorer.commandTimeoutMs": {
+          "type": "number",
+          "default": 60000,
+          "description": "Timeout for a single tf command, in milliseconds.",
+          "minimum": 1000,
+          "maximum": 600000
+        },
+        "teamExplorer.decorations": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show TFVC state in the file tree: a lock for files under source control, a check for files checked out, and a plus for files added but not yet checked in."
+        },
+        "teamExplorer.ignore": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "node_modules",
+            "packages",
+            "nul",
+            ".git",
+            ".vs",
+            ".svn",
+            ".angular",
+            ".nuxt",
+            ".next",
+            "dist",
+            "bower_components",
+            "*.zip",
+            "*.msi",
+            "*.bak",
+            "thumbs.db",
+            "desktop.ini"
+          ],
+          "markdownDescription": "Names and globs never offered for check-in, on top of the 22 `tf` already excludes (`bin`, `obj`, `*.exe`, ...). Matched by NAME against every path component, so one `node_modules` covers every project. `nul` is here because three real files with that name make the whole scan fail. The nearest `.tfignore` at or above the workspace folder (within its TFVC mapping) is read as well, and can negate an entry here with `!`; one in a subfolder is not. Entries containing `/`, `\\`, `!`, `%` or `^` are dropped, with a line in the output channel."
+        },
+        "teamExplorer.scanForNewFiles": {
+          "type": "boolean",
+          "default": true,
+          "description": "Look for files that are not in source control, in the background. Turning this off stops the warning badge for files edited without being checked out, and leaves the \"Not in source control\" group empty. Takes full effect after a window reload."
+        },
+        "teamExplorer.showNotInSourceControl": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show files that are not in source control as a \"Not in source control\" group in the Source Control panel. Off by default, matching Visual Studio's Pending Changes, which does not list them. The background scan runs either way: it is what marks files edited without being checked out."
+        },
+        "teamExplorer.showActivityBar": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show the Team Explorer icon in the activity bar. It stays hidden in folders that are not mapped in a TFVC workspace, whatever this is set to."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "package": "npm run build && node scripts/package.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "1.100.0",
+    "@vscode/vsce": "4.0.0",
+    "esbuild": "^0.28.0",
+    "typescript": "^5.3.0",
+    "vitest": "^5.0.0"
+  },
+  "dependencies": {
+    "diff": "^9.0.0",
+    "fast-xml-parser": "^5.11.0"
+  }
+}

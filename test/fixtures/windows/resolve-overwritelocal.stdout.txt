@@ -1,0 +1,3 @@
+Resolved C:\Users\user1\AppData\Local\Temp\claude\c--Users-user1-source-repos-vscode-tfvc\aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\scratchpad\p5ws\Program.cs as OverwriteLocal
+C:\Users\user1\AppData\Local\Temp\claude\c--Users-user1-source-repos-vscode-tfvc\aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\scratchpad\p5ws:
+Getting Program.cs

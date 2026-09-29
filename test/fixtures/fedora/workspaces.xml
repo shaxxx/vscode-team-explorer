@@ -1,0 +1,14 @@
+<Workspaces>
+  <Workspace computer="FEDORA" name="Fedora" ownerdisp="Filip" ownerid="REDACTED@example.com" ownertype="Microsoft.IdentityModel.Claims.ClaimsIdentity" owner="00000000-0000-0000-0000-000000000000" owneruniq="00000000-0000-0000-0000-000000000000">
+    <Comment />
+    <Folders>
+      <WorkingFolder local="Z:\home\shax\work" item="$/" />
+    </Folders>
+    <LastAccessDate>2026-09-16T08:04:31.467+02:00</LastAccessDate>
+    <OwnerAliases>
+      <string>user@example.com</string>
+      <string>user@example.com</string>
+      <string>Filip</string>
+    </OwnerAliases>
+  </Workspace>
+</Workspaces>

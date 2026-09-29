@@ -1,0 +1,14 @@
+Local information:
+  Local path : 
+  Server path: 
+  Changeset  : 0
+  Change     : none
+  Type       : 
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/Web
+  Changeset    : 18312
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 21. ožujka 2025. 12:08:14
+  Type         : folder

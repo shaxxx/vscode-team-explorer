@@ -1,0 +1,2 @@
+CardGatewayTool\CardGatewayTool:
+Pending add: CardGatewayTool.csproj.vspscc

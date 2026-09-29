@@ -1,0 +1,48 @@
+Local information:
+  Local path : C:\work\OPS\OPS2023\CORE.Api\CORE.Api.xml
+  Server path: $/OPS/OPS2023/CORE.Api/CORE.Api.xml
+  Changeset  : 15451
+  Change     : edit
+  Type       : file
+Server information:
+  Server path  : $/OPS/OPS2023/CORE.Api/CORE.Api.xml
+  Changeset    : 21004
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 3. rujna 2026. 14:25:33
+  Type         : file
+  File type    : Binary
+  Size         : 23113
+Local information:
+  Local path : C:\work\Ledger\dbo\Stored Procedures\till_InvoiceSelect.sql
+  Server path: $/Ledger/dbo/Stored Procedures/till_InvoiceSelect.sql
+  Changeset  : 20783
+  Change     : edit
+  Type       : file
+Server information:
+  Server path  : $/Ledger/dbo/Stored Procedures/till_InvoiceSelect.sql
+  Changeset    : 20783
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 30. lipnja 2026. 13:44:47
+  Type         : file
+  File type    : utf-8
+  Size         : 3932
+Local information:
+  Local path : C:\work\Shop\Shop2023\Enterprise.Till.Server\Startup.cs
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/Startup.cs
+  Changeset  : 18325
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/Startup.cs
+  Changeset    : 18325
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 24. ožujka 2025. 20:02:02
+  Type         : file
+  File type    : utf-8
+  Size         : 12231

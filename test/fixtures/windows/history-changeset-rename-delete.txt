@@ -1,0 +1,11 @@
+-------------------------------------------------------------------------------
+Changeset: 20213
+User: Filip
+Date: 13. veljače 2026. 15:53:13
+
+Comment:
+
+Items:
+  delete, source rename $/Shop/Shop2023/Raverus.FiskalizacijaDEV.Standard/Raverus.FiskalizacijaDEV.sln;X703
+  rename                $/Shop/Shop2023/Raverus.FiskalizacijaDEV.Standard/Raverus.FiskalizacijaDEV.sln.bak
+

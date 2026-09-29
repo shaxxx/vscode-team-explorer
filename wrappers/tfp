@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+# ============================================================================
+#  tfp - runs the Windows TF.exe under Wine with a Personal Access Token (PAT),
+#        so Azure DevOps never asks you to sign in interactively.
+#
+#  The Linux twin of tfp.cmd. Same usage:
+#
+#    tfp vc status . /recursive
+#    tfp vc checkout src/Program.cs
+#    tfp vc workspaces /collection:https://dev.azure.com/your-org/
+#
+#  Install:  cp wrappers/tfp ~/bin/tfp && chmod +x ~/bin/tfp
+#  Setup:    see docs/install/linux.md (Wine prefix, .NET 4.8, TF.exe)
+#
+#  The Team Explorer (TFVC) VS Code extension, a terminal and an AI agent can
+#  all use this one file: it passes every argument through, appends the
+#  login arguments itself, prints nothing of its own on stdout, and returns
+#  tf's exit code.
+#
+#  Configuration (environment variables, all optional):
+#    TF_DIR        folder holding TF.exe        default /opt/teamexplorer
+#    WINEPREFIX    Wine prefix with .NET 4.8    default ~/.wine-tf
+#    TFS_PAT       PAT value (wins over file)   default unset
+#    TFS_PAT_FILE  file holding the PAT         default ~/.tfs/pat.txt
+# ============================================================================
+set -uo pipefail
+
+TF_DIR="${TF_DIR:-/opt/teamexplorer}"
+TF_EXE="$TF_DIR/TF.exe"
+export WINEPREFIX="${WINEPREFIX:-$HOME/.wine-tf}"
+# Wine's fixme/err chatter would otherwise pollute tf output.
+export WINEDEBUG="${WINEDEBUG:--all}"
+
+if [[ ! -f "$TF_EXE" ]]; then
+  echo "[tfp] TF.exe not found at: $TF_EXE" >&2
+  echo "[tfp] Copy the Team Explorer folder from a Windows VS 2022 install, or set TF_DIR." >&2
+  exit 1
+fi
+
+if [[ ! -d "$WINEPREFIX" ]]; then
+  echo "[tfp] Wine prefix not found: $WINEPREFIX  (see docs/install/linux.md)" >&2
+  exit 1
+fi
+
+PAT="${TFS_PAT:-}"
+if [[ -z "$PAT" ]]; then
+  PAT_FILE="${TFS_PAT_FILE:-$HOME/.tfs/pat.txt}"
+  if [[ ! -s "$PAT_FILE" ]]; then
+    echo "[tfp] PAT file not found or empty: $PAT_FILE" >&2
+    echo "[tfp] Put your Azure DevOps PAT on the first line, or set TFS_PAT / TFS_PAT_FILE." >&2
+    exit 1
+  fi
+  PAT="$(head -n1 "$PAT_FILE" | tr -d '[:space:]')"
+  if [[ -z "$PAT" ]]; then
+    echo "[tfp] PAT file has an empty first line: $PAT_FILE" >&2
+    exit 1
+  fi
+fi
+
+# TF.exe parses every argument starting with "/" as an option, so an absolute
+# Unix path would be swallowed as a bogus switch. Convert the ones that name a
+# real file/directory into Windows form (Z:\home\...); leave switches alone.
+args=()
+for a in "$@"; do
+  if [[ "$a" == /* && -e "$a" ]]; then
+    args+=("$(winepath -w "$a")")
+  else
+    args+=("$a")
+  fi
+done
+
+# /loginType:OAuth is what makes PAT auth work with the Visual Studio TF.exe.
+# /noprompt turns auth failures into terminal errors instead of a GUI dialog
+# that nothing can click under Wine.
+exec wine "$TF_EXE" "${args[@]}" /noprompt /loginType:OAuth "/login:.,$PAT"

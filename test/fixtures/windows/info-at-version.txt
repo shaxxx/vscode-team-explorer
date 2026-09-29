@@ -1,0 +1,16 @@
+Local information:
+  Local path : C:\work\Shop\Shop2023\Distribution\Forms\frmInvoice.vb
+  Server path: $/Shop/Shop2023/Distribution/Forms/frmInvoice.vb
+  Changeset  : 21082
+  Change     : none
+  Type       : file
+Server information:
+  Server path  : $/Shop/Shop2023/Distribution/Forms/frmInvoice.vb
+  Changeset    : 20545
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 28. travnja 2026. 9:32:58
+  Type         : file
+  File type    : utf-8
+  Size         : 76808

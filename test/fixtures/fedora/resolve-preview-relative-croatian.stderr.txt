@@ -1,0 +1,1 @@
+Urudzbeni.sln: A non version controlled file or writable file by the same name already exists locally.

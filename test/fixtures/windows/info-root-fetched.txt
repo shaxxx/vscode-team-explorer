@@ -1,0 +1,14 @@
+Local information:
+  Local path : C:\Users\user1\AppData\Local\Temp\tfvc-probe-r32
+  Server path: $/Shop/Shop2023/Enterprise.Till.Server/Web
+  Changeset  : 18312
+  Change     : none
+  Type       : folder
+Server information:
+  Server path  : $/Shop/Shop2023/Enterprise.Till.Server/Web
+  Changeset    : 18312
+  Deletion ID  : 0
+  Lock         : none
+  Lock owner   : 
+  Last modified: 21. ožujka 2025. 12:08:14
+  Type         : folder
