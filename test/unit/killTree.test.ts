@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { killTree } from '../../src/tf/TfClient.js';
+import { killTree, parsePgrpFromStat } from '../../src/tf/TfClient.js';
 
 /**
  * killTree runs on the timeout path, which is the worst place for a crash:
@@ -108,13 +108,14 @@ describe('killTree', () => {
     // negative pid. Without this stub the fake pid fails that check and falls
     // through to child.kill() -- which is the correct, safe behaviour, and is
     // asserted separately below.
-    if (realGetpgid) proc.getpgid = (pid: number) => pid;
+    proc.getpgid = (pid: number) => pid;
 
     try {
       killTree(child);
     } finally {
       process.kill = realKill;
       if (realGetpgid) proc.getpgid = realGetpgid;
+      else delete proc.getpgid;
     }
 
     if (process.platform === 'win32') {
@@ -157,6 +158,7 @@ describe('killTree', () => {
     } finally {
       process.kill = realKill;
       if (realGetpgid) proc.getpgid = realGetpgid;
+      else delete proc.getpgid;
     }
 
     expect(signals, 'signalled a group it does not lead').toEqual([]);
@@ -182,5 +184,24 @@ describe('killTree', () => {
     expect(seen, 'an uncaught error here takes down the extension host').toEqual([]);
     // And the fallback must still run, or the timeout bounds nothing.
     expect(killedCount()).toBe(1);
+  });
+});
+
+describe('parsePgrpFromStat', () => {
+  it('reads pgrp from a normal line', () => {
+    expect(parsePgrpFromStat('4242 (tfp) S 1 4242 4242 0 -1 4194560 100')).toBe(4242);
+  });
+  it('handles a comm with spaces and parentheses', () => {
+    expect(parsePgrpFromStat('1234 (my (weird) proc) S 1 1234 1234 0 -1 4194560')).toBe(1234);
+  });
+  it('returns undefined for garbage or empty input', () => {
+    expect(parsePgrpFromStat('')).toBeUndefined();
+    expect(parsePgrpFromStat('no parens here')).toBeUndefined();
+    expect(parsePgrpFromStat('1 (x) S 1')).toBeUndefined();
+    expect(parsePgrpFromStat('1 (x) S 1 abc 3')).toBeUndefined();
+  });
+  it('returns undefined for non-positive values', () => {
+    expect(parsePgrpFromStat('1 (x) S 1 0 3')).toBeUndefined();
+    expect(parsePgrpFromStat('1 (x) S 1 -5 3')).toBeUndefined();
   });
 });

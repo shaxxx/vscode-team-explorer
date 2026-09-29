@@ -1,4 +1,4 @@
-import { spawn, type StdioOptions } from 'node:child_process';
+import { execFileSync, spawn, type StdioOptions } from 'node:child_process';
 import { closeSync, existsSync, openSync, readFileSync, unlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { isAbsolute, join } from 'node:path';
@@ -916,19 +916,64 @@ export function killTree(child: {
  * without it — at which point the negative pid is the extension host's own
  * group and VS Code kills itself.
  *
- * So verify it rather than assume it. This also covers PID reuse: a recycled
+ * So verify it rather than assume it. Node has no `process.getpgid`, hence
+ * /proc on Linux and `ps` elsewhere; if neither can confirm it, the answer is
+ * "no" and we fall back to the plain kill. This also covers PID reuse: a recycled
  * pid is almost never a group leader, so it fails here and we fall back to the
  * plain kill.
  */
 function leadsOwnGroup(pid: number): boolean {
-  // POSIX-only, and not on the Process type, hence the cast.
-  const getpgid = (process as unknown as { getpgid?: (p: number) => number }).getpgid;
-  if (!getpgid) return false;
+  return processGroupOf(pid) === pid;
+}
+
+/**
+ * Parse the process-group id out of a Linux `/proc/<pid>/stat` line.
+ *
+ * The format is `pid (comm) state ppid pgrp ...`. `comm` is free text and can
+ * hold spaces and parentheses, so only the text after the LAST ')' is
+ * splittable: [state, ppid, pgrp, ...]. Anything that does not yield a positive
+ * integer is undefined, never a guess.
+ */
+export function parsePgrpFromStat(stat: string): number | undefined {
+  const close = stat.lastIndexOf(')');
+  if (close < 0) return undefined;
+  const fields = stat
+    .slice(close + 1)
+    .trim()
+    .split(' ');
+  const raw = fields[2];
+  if (raw === undefined || !/^\d+$/.test(raw)) return undefined;
+  const pgrp = Number(raw);
+  return Number.isSafeInteger(pgrp) && pgrp > 0 ? pgrp : undefined;
+}
+
+/**
+ * The process-group id of `pid`, or undefined when it cannot be determined.
+ * Every failure (process gone, no /proc, no ps, garbage output) is undefined so
+ * the caller treats it as "not verified".
+ */
+function processGroupOf(pid: number): number | undefined {
   try {
-    return getpgid(pid) === pid;
+    // Node has no getpgid today (not on Linux, not on macOS), but a future
+    // version may add it, and tests stub it.
+    const getpgid = (process as unknown as { getpgid?: (p: number) => number }).getpgid;
+    if (getpgid) return getpgid(pid);
+    if (process.platform === 'linux') {
+      return parsePgrpFromStat(readFileSync('/proc/' + pid + '/stat', 'utf8'));
+    }
+    // No /proc (macOS, BSD): ask ps.
+    const out = execFileSync('ps', ['-o', 'pgid=', '-p', String(pid)], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+      timeout: 2000,
+      windowsHide: true,
+    }).trim();
+    if (!/^\d+$/.test(out)) return undefined;
+    const pgid = Number(out);
+    return pgid > 0 ? pgid : undefined;
   } catch {
-    // ESRCH: already gone. Nothing to signal.
-    return false;
+    // ESRCH / ENOENT: already gone or unreadable. Nothing to verify.
+    return undefined;
   }
 }
 
