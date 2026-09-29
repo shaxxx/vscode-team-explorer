@@ -1,8 +1,9 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { spawn } from 'node:child_process';
 import { mkdtempSync, rmSync, writeFileSync, chmodSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { TfClient, SPAWN_DETACHED } from '../../src/tf/TfClient.js';
+import { TfClient, SPAWN_DETACHED, killTree } from '../../src/tf/TfClient.js';
 
 /**
  * The POSIX half of the timeout guard, which had NO coverage at all: the two
@@ -69,6 +70,34 @@ describe.skipIf(!POSIX)('killTree on POSIX', () => {
 
     expect(result.timedOut).toBe(true);
     expect(Date.now() - started, 'outlived its own timeout').toBeLessThan(6000);
+  }, 20_000);
+
+  it('does not signal a group for a child that shares the test runner group', async () => {
+    // The real refusal path: NOT detached, so the child is in OUR group and
+    // -pid would be a group it does not lead (or ours). Real Node has no
+    // getpgid, so this exercises the /proc / ps lookup, not a stub.
+    const child = spawn('sleep', ['30'], { stdio: 'ignore' });
+    const exited = new Promise<boolean>((resolve) => {
+      child.once('exit', () => resolve(true));
+      setTimeout(() => resolve(false), 5000).unref();
+    });
+    const signalled: number[] = [];
+    const realKill = process.kill.bind(process);
+    process.kill = ((pid: number) => {
+      signalled.push(pid);
+      return true;
+    }) as typeof process.kill;
+    try {
+      killTree(child);
+    } finally {
+      process.kill = realKill;
+    }
+    try {
+      expect(signalled.filter((p) => p < 0), 'sent a group signal it did not verify').toEqual([]);
+      expect(await exited, 'the child was not killed directly').toBe(true);
+    } finally {
+      if (child.exitCode === null && child.signalCode === null) child.kill('SIGKILL');
+    }
   }, 20_000);
 });
 

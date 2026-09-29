@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { killTree, parsePgrpFromStat } from '../../src/tf/TfClient.js';
+import { killTree, parsePgrpFromStat, SIGKILL_AFTER_MS } from '../../src/tf/TfClient.js';
 
 /**
  * killTree runs on the timeout path, which is the worst place for a crash:
@@ -43,10 +43,14 @@ const spawned = h.spawned;
 type PosixProcess = { getpgid?: (pid: number) => number };
 const proc = process as unknown as PosixProcess;
 
+// Above Linux's max pid (2^22), so it can never name a real process or group,
+// even if a signal or a /proc lookup were to reach the real system.
+const FAKE_PID = 99_999_999;
+
 function fakeChild(over: Partial<Parameters<typeof killTree>[0]> = {}) {
   let killed = 0;
   const child = {
-    pid: 4242,
+    pid: FAKE_PID,
     exitCode: null as number | null,
     signalCode: null as NodeJS.Signals | null,
     kill: () => {
@@ -87,11 +91,11 @@ describe('killTree', () => {
   it('kills the whole tree of a live child', () => {
     const { child, killedCount } = fakeChild();
 
-    // `process.kill` MUST be stubbed on POSIX. Unstubbed, this test sent a
-    // real SIGTERM — and 500 ms later a real SIGKILL — to process group 4242
-    // on whatever machine ran it. On the Fedora box that is a boot-time
-    // systemd unit, and systemd setsid()s every service, so `-4242` resolves
-    // to a real group. `npx vitest run` could take down a system service.
+    // `process.kill` MUST be stubbed on POSIX, INCLUDING while the SIGKILL
+    // escalation timer runs (fake timers below advance it before the restore).
+    // Unstubbed, this test sent a real SIGTERM, and 500 ms later a real
+    // SIGKILL, to a real process group on whatever machine ran it. The fake
+    // pid is above Linux's max pid so it can never name one anyway.
     //
     // It also made the assertion meaningless: `killedCount() === 1` could only
     // pass if the group signal THREW and control fell through to child.kill(),
@@ -104,15 +108,19 @@ describe('killTree', () => {
       signals.push([pid, sig]);
       return true;
     }) as typeof process.kill;
-    // killTree now verifies the child leads its own group before sending a
-    // negative pid. Without this stub the fake pid fails that check and falls
-    // through to child.kill() -- which is the correct, safe behaviour, and is
-    // asserted separately below.
+    // killTree verifies the child leads its own group before sending a
+    // negative pid. Node has no getpgid, so on Linux that check reads /proc,
+    // where the fake pid does not exist and it would (correctly) fall back to
+    // child.kill(). The stub makes the group path run on every platform; the
+    // real lookup is covered by killTree.posix.test.ts.
     proc.getpgid = (pid: number) => pid;
+    vi.useFakeTimers();
 
     try {
       killTree(child);
+      vi.advanceTimersByTime(SIGKILL_AFTER_MS);
     } finally {
+      vi.useRealTimers();
       process.kill = realKill;
       if (realGetpgid) proc.getpgid = realGetpgid;
       else delete proc.getpgid;
@@ -122,13 +130,18 @@ describe('killTree', () => {
       expect(spawned).toHaveLength(1);
       expect(spawned[0].cmd).toBe('taskkill');
       // /T is the reason this exists: tf.exe is a GRANDCHILD of cmd.exe.
-      expect(spawned[0].args).toEqual(['/PID', '4242', '/T', '/F']);
+      expect(spawned[0].args).toEqual(['/PID', String(FAKE_PID), '/T', '/F']);
       expect(signals, 'Windows must not use the POSIX group path').toEqual([]);
     } else {
       // The NEGATIVE pid is the whole point: it signals the group, which is
       // what `wineserver` is in. A plain `child.kill()` reaches only the
       // direct child.
-      expect(signals).toEqual([[-4242, 'SIGTERM']]);
+      // SIGTERM, then after the delay the group-alive probe and the SIGKILL.
+      expect(signals).toEqual([
+        [-FAKE_PID, 'SIGTERM'],
+        [-FAKE_PID, 0],
+        [-FAKE_PID, 'SIGKILL'],
+      ]);
       expect(killedCount(), 'the group signal succeeded, so no direct kill').toBe(0);
     }
   });
@@ -163,6 +176,30 @@ describe('killTree', () => {
 
     expect(signals, 'signalled a group it does not lead').toEqual([]);
     expect(killedCount(), 'should fall back to the plain kill').toBe(1);
+  });
+
+  it('refuses the group signal for pid 1 or lower, even if getpgid agrees', () => {
+    if (process.platform === 'win32') return;
+    for (const pid of [1, 0, -1]) {
+      const { child, killedCount } = fakeChild({ pid });
+      const signals: number[] = [];
+      const realKill = process.kill.bind(process);
+      const realGetpgid = proc.getpgid;
+      process.kill = ((p: number) => {
+        signals.push(p);
+        return true;
+      }) as typeof process.kill;
+      proc.getpgid = (p: number) => p;
+      try {
+        killTree(child);
+      } finally {
+        process.kill = realKill;
+        if (realGetpgid) proc.getpgid = realGetpgid;
+        else delete proc.getpgid;
+      }
+      expect(signals, `signalled with pid ${pid}`).toEqual([]);
+      expect(killedCount()).toBe(1);
+    }
   });
 
   it('survives a taskkill that cannot be spawned, and still kills the child', async () => {
@@ -203,5 +240,13 @@ describe('parsePgrpFromStat', () => {
   it('returns undefined for non-positive values', () => {
     expect(parsePgrpFromStat('1 (x) S 1 0 3')).toBeUndefined();
     expect(parsePgrpFromStat('1 (x) S 1 -5 3')).toBeUndefined();
+  });
+  it('splits at the LAST paren, never the first', () => {
+    // Splitting at the first ')' would read pgrp 77 (the pid itself), the
+    // dangerous direction: it would look like a group leader.
+    expect(parsePgrpFromStat('77 (a) S 1 77 77) S 1 99 99')).toBe(99);
+  });
+  it('tolerates a trailing newline', () => {
+    expect(parsePgrpFromStat('4242 (tfp) S 1 4242 4242\n')).toBe(4242);
   });
 });

@@ -923,6 +923,8 @@ export function killTree(child: {
  * plain kill.
  */
 function leadsOwnGroup(pid: number): boolean {
+  // process.kill(-1) signals every process the user owns; never verify that.
+  if (!Number.isInteger(pid) || pid <= 1) return false;
   return processGroupOf(pid) === pid;
 }
 
