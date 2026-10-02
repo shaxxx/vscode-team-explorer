@@ -38,6 +38,7 @@ import { ExplorerService } from './explorer/ExplorerService.js';
 import { filesUnder, isServerPath } from './explorer/explorerModel.js';
 import { SourceControlExplorer, EXPLORER_VIEW_TYPE } from './ui/SourceControlExplorer.js';
 import { registerShowInExplorer } from './commands/showInExplorer.js';
+import { registerRevealInExplorer } from './commands/revealInExplorer.js';
 import { ShelveService } from './shelve/ShelveService.js';
 import { ShelvesetsView, SHELVESETS_VIEW_TYPE } from './ui/ShelvesetsView.js';
 import { registerShelve } from './commands/shelve.js';
@@ -837,6 +838,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }),
   );
   registerShowInExplorer(context, service, sce);
+  registerRevealInExplorer(context);
 
   // Phase 4: shelvesets. Shelve from the Source Control title bar, and the
   // Shelvesets tab (Find Shelvesets). Unshelve hands its conflicts to phase 5.

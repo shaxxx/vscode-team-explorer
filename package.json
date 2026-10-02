@@ -142,6 +142,11 @@
         "category": "Team Explorer"
       },
       {
+        "command": "teamExplorer.revealInExplorer",
+        "title": "Reveal in Explorer",
+        "category": "Team Explorer"
+      },
+      {
         "command": "teamExplorer.viewVersion",
         "title": "View Server Version",
         "category": "Team Explorer"
@@ -292,6 +297,10 @@
           "when": "teamExplorer:enabled"
         },
         {
+          "command": "teamExplorer.revealInExplorer",
+          "when": "false"
+        },
+        {
           "command": "teamExplorer.viewVersion",
           "when": "false"
         },
@@ -384,6 +393,11 @@
           "command": "teamExplorer.showConflicts",
           "when": "scmProvider == teamExplorer && scmResourceGroup == conflicts",
           "group": "1_modification@4"
+        },
+        {
+          "command": "teamExplorer.revealInExplorer",
+          "when": "scmProvider == teamExplorer && scmResourceState =~ /^(checkedOut|pendingAdd|pendingRename|conflict|untracked)$/",
+          "group": "4_reveal@1"
         }
       ],
       "scm/resourceFolder/context": [

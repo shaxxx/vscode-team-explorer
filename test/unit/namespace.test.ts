@@ -108,17 +108,20 @@ describe('what the code actually reads', () => {
     const providerId = /createSourceControl\(\s*'([^']+)'/.exec(scmSource)?.[1];
 
     // Plan 3: rows also carry a `contextValue` naming their PendingState (or
-    // ScmProvider's own 'untracked' literal for a row with no pending change
-    // at all), which `scmResourceState` clauses key on. Read from FileState.ts
-    // rather than hard-coded here, for the same reason `groups` is read from
-    // ScmProvider.ts above: a typo'd or removed state must fail this test, not
-    // silently pass because the whitelist was never updated to match.
+    // one of ScmProvider's own literals, 'untracked' and 'conflict', for a row
+    // that is not a pending change), which `scmResourceState` clauses key on.
+    // Read from FileState.ts and ScmProvider.ts rather than hard-coded here,
+    // for the same reason `groups` is read from ScmProvider.ts above: a typo'd
+    // or removed state must fail this test, not silently pass because the
+    // whitelist was never updated to match.
     const fileStateSource = readFileSync(join(ROOT, 'src/state/FileState.ts'), 'utf8');
     const pendingStateMatch = /type PendingState = ([^;]+);/.exec(fileStateSource);
     expect(pendingStateMatch, 'could not find the PendingState union in FileState.ts').not.toBeNull();
+    const rowLiterals = [...scmSource.matchAll(/contextValue: '(\w+)'/g)].map((m) => m[1]);
+    expect(rowLiterals.sort()).toEqual(['conflict', 'untracked']);
     const knownStates = new Set([
       ...[...pendingStateMatch![1].matchAll(/'(\w+)'/g)].map((m) => m[1]),
-      'untracked',
+      ...rowLiterals,
     ]);
 
     // Plan 3: the editor menu and the Explorer submenu's Compare entry gate on
