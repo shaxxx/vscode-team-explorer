@@ -65,10 +65,13 @@ depends on the row:
   version. Available on any row except "Not in source control". This asks for confirmation too,
   since the edit is discarded for good.
 - **Compare with Latest Version** — diff your file against the server's copy. Available on edited
-  (checked-out) rows, and is also what clicking the row itself does.
+  (checked-out) rows, and is also what clicking the row itself does. Clicking a pending-Add row
+  opens the file instead: the server has no copy of it to compare with yet.
 - **Check Out for Edit** — available on a pending-rename row: a rename alone does not check the
   file out for editing, so this is how you make it editable too.
 - **View History** — available on checked-out and pending-delete rows.
+- **Reveal in Explorer** — open VS Code's Explorer with the file selected. Available on every row
+  except a pending delete, whose file is no longer on disk.
 - **Add to Source Control** — available on "Not in source control" rows (once that group is
   turned on), and on folder rows there.
 
@@ -84,7 +87,9 @@ Compare with Latest Version opens the server's copy of the file next to your loc
 While a file with a pending edit is open in an editor, VS Code also draws small coloured bars in
 the gutter next to lines that differ from the server version — the same mechanism the built-in Git
 extension uses. These do not appear for a pending Add (there is no server copy yet to compare
-against) or for a binary file.
+against) or for a binary file. A file TFVC records as binary whose content is in fact text (it
+contains no NUL byte), such as a generated XML documentation file, is compared and gets the bars
+like any other text file.
 
 ## The two Refreshes
 

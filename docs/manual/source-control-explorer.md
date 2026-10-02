@@ -19,12 +19,19 @@ header to sort by it; click again to reverse the order. Names appear first; the 
 in as their information arrives from the server, so a large folder is usable before everything has
 loaded. The footer shows the item count and when status was last loaded.
 
-**This list is server items only.** It is built from what the server's own directory listing
-returns, not from your local pending changes. A pending Add you have not checked in yet is not
-listed here at all, because the server does not have it yet — it appears once you check it in.
-**Pending Change** shows *your own* pending change on an item that the server already has (for
-example `edit`), and **Latest** tells you whether your local copy matches the server's latest
-version (`Yes`/`No`), or whether it has never been downloaded or is not mapped in this workspace.
+The list is built from what the server's own directory listing returns, plus **your own pending
+Adds**, which the server does not have yet. A file or folder you added shows with a green **+** to
+the left of its name, as in Visual Studio, with **Latest** `Yes` and no **Last Check-in**. That
+includes a new folder you never added by itself (`tf` records an Add only for the file inside it),
+as long as it lies under the folder open in VS Code; see [limitations.md](limitations.md). Opening
+a new folder lists what you added in it, and the folder tree on the left shows new folders with a
+green name. On a pending Add, everything that needs the server's copy is dimmed (Get Latest
+Version, Get Specific Version…, Check Out for Edit, View, Compare with Latest, Annotate and View
+History); double-clicking a new file opens it.
+
+**Pending Change** shows *your own* pending change on an item (for example `edit` or `add`), and
+**Latest** tells you whether your local copy matches the server's latest version (`Yes`/`No`), or
+whether it has never been downloaded or is not mapped in this workspace.
 
 ## The toolbar
 

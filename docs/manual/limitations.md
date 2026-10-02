@@ -40,8 +40,10 @@ These are known, deliberate, and not going to change without a specific reason t
   `packages`, so a versioned, edited file under a folder named `packages` shows no change badge in
   the tree (it still appears correctly in the Source Control panel itself). Remove `packages` from
   the setting if your project keeps versioned files there.
-- **The Source Control Explorer lists server items only.** A file you've just added (a pending Add)
-  does not appear in the Source Control Explorer until it is checked in.
+- **A new folder holding only new files shows in the Source Control Explorer only under the folder
+  open in VS Code.** When you add a file in a new folder, `tf` records an Add for the file but none
+  for the folder, so the explorer works the folder out from the open folder's own pending changes.
+  Elsewhere it appears once checked in. A folder you added as a whole shows anywhere.
 - **The History grid's "Changeset" column header can be cut off** (reading "Changese"): its columns
   have a fixed width that cannot be resized. This is cosmetic and does not affect the data.
 - **Annotate stops at a whole-file reformat.** If a changeset reformatted an entire file (for

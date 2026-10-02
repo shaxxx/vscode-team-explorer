@@ -46,7 +46,8 @@ would be confusing, unsafe, or (for check-in) is a hard rule of this extension: 
 | Get Latest Version | `teamExplorer.getLatest` | Yes | Explorer's Team Explorer submenu |
 | Add to Source Control | `teamExplorer.add` | Yes | Source Control panel ("Not in source control" rows), Explorer's Team Explorer submenu |
 | Refresh | `teamExplorer.refresh` | Yes | Source Control panel title bar |
-| Compare with Latest Version | `teamExplorer.compareWithLatest` | Yes | Source Control panel rows (and the row's default click action), Explorer's Team Explorer submenu, editor menu |
+| Compare with Latest Version | `teamExplorer.compareWithLatest` | Yes | Source Control panel rows (and the row's default click action, except on a pending Add, which opens the file), Explorer's Team Explorer submenu, editor menu |
+| Reveal in Explorer | `teamExplorer.revealInExplorer` | No | Source Control panel rows (all but a pending delete) |
 | Check for Server Changes | `teamExplorer.checkForServerChanges` | No | Editor menu only — the same command as Compare with Latest Version, retitled for a file with no pending change |
 | Set Personal Access Token | `teamExplorer.setPat` | Yes, always (not gated on a mapped workspace) | Command Palette only |
 | Check In | `teamExplorer.checkInFromButton` | No | Source Control panel title bar (the Check In button) only |
