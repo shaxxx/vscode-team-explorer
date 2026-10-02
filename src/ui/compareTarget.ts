@@ -1,5 +1,7 @@
+import { readFileSync } from 'node:fs';
 import type { PendingChange } from '../tf/types.js';
 import { isBinary, isPendingAdd } from '../tf/types.js';
+import { looksLikeText } from './decode.js';
 
 export type CompareVerdict = 'ok' | 'unmapped' | 'pendingAdd' | 'binary';
 
@@ -14,16 +16,29 @@ export type CompareVerdict = 'ok' | 'unmapped' | 'pendingAdd' | 'binary';
  * nothing at all for those files, with no message: indistinguishable from the
  * extension being broken.
  *
- * Pure, so the decision is testable without the extension host.
+ * `localIsText` is asked only for a file TFVC labels binary, which can be
+ * plain text (Shop.Api.xml); it reads the disk, so nothing else pays for it.
+ *
+ * Pure apart from that, so the decision is testable without the extension host.
  */
 export function compareVerdict(
   mapped: boolean,
   change: PendingChange | undefined,
+  localIsText: () => boolean = () => false,
 ): CompareVerdict {
   if (!mapped) return 'unmapped';
   // A pending Add exists only locally — there is no server version to diff.
   if (change && isPendingAdd(change)) return 'pendingAdd';
-  if (change && isBinary(change)) return 'binary';
+  if (change && isBinary(change) && !localIsText()) return 'binary';
   // No pending change is FINE: compare the working file against the tip.
   return 'ok';
+}
+
+/** The local file's bytes look like text; false when it cannot be read. */
+export function localLooksLikeText(fsPath: string): boolean {
+  try {
+    return looksLikeText(readFileSync(fsPath));
+  } catch {
+    return false;
+  }
 }

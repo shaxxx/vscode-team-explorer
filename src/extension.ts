@@ -14,7 +14,7 @@ import { UnversionedScan } from './scan/UnversionedScan.js';
 import { ServerContentProvider, TFVC_SCHEME, decodeWithCodePage, type ShelvedRef } from './ui/ServerContentProvider.js';
 import { VersionStore, versionTextFrom } from './history/VersionStore.js';
 import { QuickDiff } from './ui/QuickDiff.js';
-import { compareVerdict } from './ui/compareTarget.js';
+import { compareVerdict, localLooksLikeText } from './ui/compareTarget.js';
 import { registerCommands } from './commands/index.js';
 import { unwrapTargets } from './commands/resolveTarget.js';
 import { registerCheckIn } from './commands/checkIn.js';
@@ -755,7 +755,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     // this command previously did nothing, silently, for every unmodified
     // file the user tried it on.
     const serverItem = service.pathMapper?.toServerPath(target.fsPath);
-    const verdict = compareVerdict(serverItem !== undefined, service.changeFor(serverItem ?? ''));
+    const verdict = compareVerdict(serverItem !== undefined, service.changeFor(serverItem ?? ''), () =>
+      localLooksLikeText(target.fsPath),
+    );
     const name = basename(target.fsPath);
 
     if (verdict === 'unmapped') {

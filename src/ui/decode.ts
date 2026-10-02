@@ -188,6 +188,17 @@ export function vscodeEncodingFor(codePage: number | undefined): string | undefi
 }
 
 /**
+ * Whether bytes TFVC labels binary (`enc` -1) are really text.
+ *
+ * Like `enc`'s code page, the binary label is set when the item is added and
+ * outlives the bytes: Shop.Api.xml is enc=-1 and plain XML. A NUL is what
+ * git takes as binary too; no text file in an 8-bit or UTF-8 encoding has one.
+ */
+export function looksLikeText(bytes: Buffer): boolean {
+  return !bytes.includes(0);
+}
+
+/**
  * Whether the bytes are valid UTF-8.
  *
  * This is the cheap local gate that keeps the whole encoding fix free for the
