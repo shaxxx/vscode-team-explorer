@@ -26,6 +26,11 @@ td { padding: 2px 8px; white-space: nowrap; }
 tr:hover td { background: var(--vscode-list-hoverBackground); }
 tr.selected td { background: var(--vscode-list-activeSelectionBackground); color: var(--vscode-list-activeSelectionForeground); }
 td.folder::before { content: '📁 '; }
+/* A pending Add, as Visual Studio marks it: a + in a gutter every name has, so it moves no icon or name. */
+td.name { position: relative; padding-left: 20px; }
+td.added::after { content: '+'; position: absolute; left: 6px; color: var(--vscode-gitDecoration-addedResourceForeground); font-weight: bold; }
+/* The tree has no gutter, and a + there reads as one more level of indent: colour alone, as VS Code's Explorer marks an added file. */
+.label.added { color: var(--vscode-gitDecoration-addedResourceForeground); }
 .latest-no { color: var(--vscode-editorWarning-foreground); }
 .latest-notDownloaded, .latest-notMapped { color: var(--vscode-descriptionForeground); }
 .footer { padding: 4px 8px; color: var(--vscode-descriptionForeground); border-top: 1px solid var(--vscode-panel-border); }

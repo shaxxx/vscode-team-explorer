@@ -56,6 +56,7 @@ function setup(over: Partial<ExplorerDeps> = {}, explorerOver: Partial<ExplorerD
       return { ok: true as const, value: LISTINGS[path] };
     }),
     cachedListing: (path: string) => cache.get(path),
+    status: vi.fn(async () => ({ ok: true as const, value: [] })),
     details: vi.fn(async (path: string) => {
       detailsCalls.push(path);
       return { info: { ok: true as const, value: INFO[path] ?? [] }, status: { ok: true as const, value: [] } };
@@ -78,6 +79,7 @@ function setup(over: Partial<ExplorerDeps> = {}, explorerOver: Partial<ExplorerD
     showHistory: vi.fn(async () => {}),
     recentChangesets: vi.fn(async () => [{ id: 16730, user: 'Filip', date: 'd', comment: 'fix\nmore' }]),
     mapServerFolder: vi.fn(async () => {}),
+    pendingChanges: () => [],
     unversionedUnder: vi.fn(() => ['C:\\work\\Shop\\Shop2023\\new.txt']),
     afterGet: vi.fn(),
     log: vi.fn(),
@@ -521,5 +523,128 @@ describe('SourceControlExplorer: staleness and disposal (review finding 4)', () 
     panel.dispose();
     resolveGet({ items: 1, deleted: 0, cancelled: false });
     await expect(action).resolves.toBeUndefined();
+  });
+});
+
+describe('SourceControlExplorer: a folder the server has nothing in', () => {
+  it('still asks status, so a file you added there shows', async () => {
+    // The empty-listing shortcut skipped status along with info, so a pending
+    // Add in a folder that is empty on the server never appeared.
+    const add = {
+      serverItem: '$/Shop/Empty/New.vb', localPath: 'C:\\work\\Shop\\Empty\\New.vb', changes: new Set(['Add', 'Edit', 'Encoding']),
+      changeFlags: 7, itemType: 'File', encoding: 65001, itemId: -5, date: '2026-10-02T08:42:59+02:00',
+      owner: 'Filip', computer: 'DEVPC', workspace: 'DEVPC',
+    };
+    const status = vi.fn(async () => ({ ok: true as const, value: [add] }));
+    const details = vi.fn();
+    const { sce } = setup({}, {
+      list: vi.fn(async (path: string) => ({ ok: true as const, value: { path, folders: [], files: [] } })),
+      status: status as never,
+      details: details as never,
+    });
+    await sce.show('$/Shop/Empty');
+    const s = lastState(createdPanels[0]);
+    expect(details).not.toHaveBeenCalled();
+    expect(status).toHaveBeenCalledWith('$/Shop/Empty');
+    expect(s.rows.map((r) => [r.name, r.pending, r.added])).toEqual([['New.vb', 'add', true]]);
+    expect(s.statusState).toBe('ok');
+    expect(s.infoState).toBe('ok');
+  });
+});
+
+describe('SourceControlExplorer: a folder you added', () => {
+  // Measured on DEVPC with a real pending Add folder: `dir` on it answers
+  // "No items match" (exit 1), while `status <folder>/*` lists its contents,
+  // files and subfolders alike.
+  const mine = (serverItem: string, itemType: 'File' | 'Folder') => ({
+    serverItem, localPath: 'C:\\work\\' + serverItem.slice(2).split('/').join('\\'), itemType,
+    changes: new Set(itemType === 'File' ? ['Add', 'Edit', 'Encoding'] : ['Add', 'Encoding']), changeFlags: itemType === 'File' ? 7 : 5,
+    encoding: itemType === 'File' ? 65001 : -3, itemId: -1, date: '2026-10-02T09:34:01+02:00', owner: 'Filip', computer: 'DEVPC', workspace: 'DEVPC',
+  });
+  const STATUS: Record<string, ReturnType<typeof mine>[]> = {
+    '$/Shop': [mine('$/Shop/New', 'Folder')],
+    '$/Shop/New': [mine('$/Shop/New/a.vb', 'File'), mine('$/Shop/New/Sub', 'Folder')],
+  };
+  const status = () => vi.fn(async (path: string) => ({ ok: true as const, value: STATUS[path] ?? [] }));
+  const details = (path: string) => ({ info: { ok: true as const, value: INFO[path] ?? [] }, status: { ok: true as const, value: STATUS[path] ?? [] } });
+
+  it('opens one the workspace knows, when dir cannot list it, from status', async () => {
+    // `dir` is still asked first: once the folder is checked in it lists, and
+    // no stale knowledge of an Add can hide what the server has.
+    const s = status();
+    const { sce, explorer } = setup({ pendingChanges: () => [mine('$/Shop/New', 'Folder'), mine('$/Shop/New/Sub', 'Folder')] as never }, { status: s as never });
+    await sce.show('$/Shop/New');
+    const state = lastState(createdPanels[0]);
+    expect(explorer.list).toHaveBeenCalledWith('$/Shop/New', true);
+    expect(state.listState).toBe('ok');
+    expect(state.rows.map((r) => [r.name, r.isFolder, r.added])).toEqual([['Sub', true, true], ['a.vb', false, true]]);
+    // The toolbar acts on the folder itself, which the server does not have either.
+    expect(state.folderAllowed).not.toContain('getLatest');
+    expect(state.folderAllowed).not.toContain('history');
+    expect(state.folderAllowed).toContain('undo');
+    // In the tree, under its parent, marked; and open, not stuck loading.
+    const tree = state.tree.map((t) => [t.path, t.added ?? false, t.loading]);
+    expect(tree).toContainEqual(['$/Shop/New', true, false]);
+    expect(tree).toContainEqual(['$/Shop/New/Sub', true, false]);
+    expect(tree).toContainEqual(['$/Shop/Shop2023', false, false]);
+  });
+
+  it('opens one only a listing showed as added, falling back when dir cannot list it', async () => {
+    // Outside the opened folder the workspace's pending changes do not reach;
+    // the parent's status is what said it was yours.
+    const { sce, panel } = await (async () => {
+      const r = setup({}, { status: status() as never, details: vi.fn(async (p: string) => details(p)) as never });
+      await r.sce.show('$/Shop');
+      return { sce: r.sce, panel: createdPanels[0] };
+    })();
+    expect(lastState(panel).rows.find((r) => r.name === 'New')).toMatchObject({ isFolder: true, added: true });
+    await sce.show('$/Shop/New');
+    const state = lastState(panel);
+    expect(state.listState).toBe('ok');
+    expect(state.rows.map((r) => r.name)).toEqual(['Sub', 'a.vb']);
+  });
+
+  it('shows a new folder that only a file you added implies, since tf pends no Add for it', async () => {
+    // Measured on DEVPC: adding test\test1.txt pended an Add for the file
+    // alone; `info` and `dir` on `$/Shop/test` both say "No items
+    // match", and `status <parent>/*` does not reach a grandchild.
+    const file = mine('$/Shop/test/test1.txt', 'File');
+    const STATUS2: Record<string, ReturnType<typeof mine>[]> = { '$/Shop/test': [file] };
+    const { sce } = setup(
+      { pendingChanges: () => [file] as never },
+      { status: vi.fn(async (p: string) => ({ ok: true as const, value: STATUS2[p] ?? [] })) as never },
+    );
+    await sce.show('$/Shop');
+    const panel = createdPanels[0];
+    let state = lastState(panel);
+    // As Visual Studio shows it: +, Latest Yes, and no Pending Change or User,
+    // since the folder has no change of its own.
+    expect(state.rows.map((r) => [r.name, r.isFolder, r.added, r.pending, r.users, r.latest])).toEqual([
+      ['Shop2023', true, undefined, '', [], 'yes'],
+      ['test', true, true, '', [], 'yes'],
+      ['readme.txt', false, undefined, '', [], 'no'],
+    ]);
+    expect(state.tree.map((t) => [t.path, t.added ?? false])).toContainEqual(['$/Shop/test', true]);
+
+    await sce.show('$/Shop/test');
+    state = lastState(panel);
+    expect(state.listState).toBe('ok');
+    expect(state.rows.map((r) => [r.name, r.added])).toEqual([['test1.txt', true]]);
+    expect(state.folderAllowed).not.toContain('getLatest');
+  });
+
+  it('marks no folder the server has, though a file you added lies under it', async () => {
+    const { sce } = setup({ pendingChanges: () => [mine('$/Shop/Shop2023/x.vb', 'File')] as never });
+    await sce.show('$/Shop');
+    const state = lastState(createdPanels[0]);
+    expect(state.rows.map((r) => r.name)).toEqual(['Shop2023', 'readme.txt']);
+    expect(state.rows.some((r) => r.added)).toBe(false);
+    expect(state.tree.some((t) => t.added)).toBe(false);
+  });
+
+  it('still reports a folder that is neither listed nor yours', async () => {
+    const { sce } = setup({ pendingChanges: () => [] }, { status: status() as never });
+    await sce.show('$/Shop/Gone');
+    expect(lastState(createdPanels[0]).listState).toBe('failed');
   });
 });

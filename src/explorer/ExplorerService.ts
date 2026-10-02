@@ -60,14 +60,14 @@ export class ExplorerService {
   /** `info` and everyone's `status` for the folder's children, side by side (X2). */
   async details(path: string): Promise<{ info: Loaded<InfoItem[]>; status: Loaded<OwnedPendingChange[]> }> {
     const spec = childrenSpec(path);
-    const [info, status] = await Promise.all([
-      this.client.run(['vc', 'info', spec]),
-      this.client.run(['vc', 'status', spec, '/user:*', '/format:xml']),
-    ]);
-    return {
-      info: this.parsed(info, (stdout) => parseInfo(stdout.toString('utf8'))),
-      status: this.parsed(status, parseStatusOwned),
-    };
+    const [info, status] = await Promise.all([this.client.run(['vc', 'info', spec]), this.status(path)]);
+    return { info: this.parsed(info, (stdout) => parseInfo(stdout.toString('utf8'))), status };
+  }
+
+  /** Everyone's `status` for the folder's children alone: for a folder the server lists nothing in, where `info` has nothing to say but a pending Add can still be. */
+  async status(path: string): Promise<Loaded<OwnedPendingChange[]>> {
+    const r = await this.client.run(['vc', 'status', childrenSpec(path), '/user:*', '/format:xml']);
+    return this.parsed(r, parseStatusOwned);
   }
 
   /** This computer's workspaces (fixtures finding 18): whose pending changes are "mine". Once, until `forget()`. */

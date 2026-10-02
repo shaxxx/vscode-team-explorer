@@ -47,6 +47,8 @@ export interface ExplorerRow {
   serverChangeset?: number;
   /** The native local path, when the item is mapped. */
   localPath?: string;
+  /** Your own pending Add: not on the server yet, so it comes from `status`, not `dir`. */
+  added?: boolean;
 }
 
 export interface Crumb {
@@ -61,6 +63,8 @@ export interface TreeRow {
   expanded: boolean;
   loading: boolean;
   current: boolean;
+  /** A folder you added: not on the server yet. */
+  added?: boolean;
 }
 
 export interface DialogState {
@@ -150,10 +154,14 @@ const SORT_KEYS: readonly SortKey[] = ['name', 'pending', 'user', 'latest', 'las
 
 const WORDS: Partial<Record<ChangeFlag, string>> = { SourceRename: 'rename' };
 
-/** "edit", "add, edit": Encoding rides along with an Add and is only named when it is all there is. */
+/**
+ * "edit", "add", "rename": as Visual Studio reads them. Encoding is only named
+ * when it is all there is, and an Add's Edit and Encoding are implied.
+ */
 export function changeLabel(changes: ReadonlySet<ChangeFlag>): string {
   const flags = [...changes];
-  const shown = flags.length > 1 ? flags.filter((f) => f !== 'Encoding') : flags;
+  const implied = (f: ChangeFlag) => f === 'Encoding' || (f === 'Edit' && changes.has('Add'));
+  const shown = flags.length > 1 ? flags.filter((f) => !implied(f)) : flags;
   return unique(shown.map((f) => WORDS[f] ?? f.toLowerCase())).join(', ');
 }
 
@@ -166,6 +174,8 @@ export interface RowInputs {
   isMine: (c: OwnedPendingChange) => boolean;
   /** PathMapper.toLocalPath: undefined outside every mapping (Q8). */
   localPathOf: (serverPath: string) => string | undefined;
+  /** Your added folders here that `status` may not name: tf pends no Add for a new file's new folder. */
+  addedFolders?: readonly string[];
 }
 
 export function buildRows(i: RowInputs): ExplorerRow[] {
@@ -203,7 +213,30 @@ export function buildRows(i: RowInputs): ExplorerRow[] {
     return row;
   };
 
-  return [...i.listing.folders.map((f) => make(f, true)), ...i.listing.files.map((f) => make(f, false))];
+  // `dir` lists what the server has, so it never names a pending Add; Visual
+  // Studio lists your own anyway, from the same pending changes `status` has.
+  const listed = new Set([...i.listing.folders, ...i.listing.files].map((n) => key(childPath(i.listing.path, n))));
+  const added = new Map<string, ExplorerRow>();
+  for (const c of i.status ?? []) {
+    const k = key(c.serverItem);
+    if (!c.changes.has('Add') || !i.isMine(c) || listed.has(k) || added.has(k)) continue;
+    if (key(parentPath(c.serverItem)) !== key(i.listing.path)) continue;
+    // Latest reads Yes, as in Visual Studio: the local file is all there is.
+    added.set(k, { ...make(nameOf(c.serverItem), c.itemType === 'Folder'), latest: 'yes', added: true });
+  }
+  // A folder only an Add deeper down implies: no change of its own, so Pending
+  // Change and User stay empty, as in Visual Studio.
+  for (const p of i.addedFolders ?? []) {
+    const k = key(p);
+    if (listed.has(k) || added.has(k) || key(parentPath(p)) !== key(i.listing.path)) continue;
+    added.set(k, { ...make(nameOf(p), true), latest: 'yes', added: true });
+  }
+
+  return [
+    ...i.listing.folders.map((f) => make(f, true)),
+    ...i.listing.files.map((f) => make(f, false)),
+    ...added.values(),
+  ];
 }
 
 function latestOf(localPath: string | undefined, info: InfoItem[] | undefined, it: InfoItem | undefined): Latest {
@@ -234,6 +267,9 @@ export function sortRows(rows: readonly ExplorerRow[], sort: SortState): Explore
 }
 
 const SINGLE_ONLY: ReadonlySet<ExplorerAction> = new Set(['open', 'history', 'compare', 'view', 'annotate', 'addItems', 'rename', 'map']);
+
+/** What needs the item on the server, which a pending Add is not yet. */
+const NEEDS_SERVER: ReadonlySet<ExplorerAction> = new Set(['getLatest', 'getSpecific', 'checkout', 'history', 'compare', 'view', 'annotate']);
 
 /** Destructive: they need an item the user picked, never the folder being browsed. */
 export const SELECTION_ONLY: ReadonlySet<ExplorerAction> = new Set(['rename', 'delete']);
@@ -267,6 +303,8 @@ export function refusal(action: ExplorerAction, rows: readonly ExplorerRow[]): s
   if (SINGLE_ONLY.has(action) && rows.length !== 1) return S.sceNeedsOne;
   const first = rows[0];
   const unmapped = rows.find((r) => r.latest === 'notMapped');
+  const added = rows.find((r) => r.added);
+  if (added && NEEDS_SERVER.has(action)) return S.scePendingAdd(added.name);
 
   // Server-side only: these work on anything the server has.
   switch (action) {
@@ -322,12 +360,15 @@ export function treeRows(
   expanded: ReadonlySet<string>,
   childrenOf: (path: string) => string[] | undefined,
   current: string,
+  isAdded: (path: string) => boolean = () => false,
 ): TreeRow[] {
   const out: TreeRow[] = [];
   const walk = (path: string, depth: number): void => {
     const open = expanded.has(key(path));
     const kids = childrenOf(path);
-    out.push({ path, name: nameOf(path), depth, expanded: open, loading: open && kids === undefined, current: key(path) === key(current) });
+    const row: TreeRow = { path, name: nameOf(path), depth, expanded: open, loading: open && kids === undefined, current: key(path) === key(current) };
+    if (isAdded(path)) row.added = true;
+    out.push(row);
     if (open && kids) for (const k of kids) walk(childPath(path, k), depth + 1);
   };
   walk('$/', 0);
@@ -380,6 +421,10 @@ export interface ModelDeps {
   localPathOf(serverPath: string): string | undefined;
   /** A folder's subfolders, when its listing is cached; undefined when it is not (yet). */
   childrenOf(serverPath: string): string[] | undefined;
+  /** Whether this folder is your pending Add, which the server does not have yet. */
+  isAdded?(serverPath: string): boolean;
+  /** Your added folders directly under `serverPath` and not among `listed`, as RowInputs.addedFolders. */
+  addedFoldersIn?(serverPath: string, listed: readonly string[]): string[];
 }
 
 export class ExplorerModel {
@@ -434,7 +479,14 @@ export class ExplorerModel {
   rows(): ExplorerRow[] {
     if (!this.listing) return [];
     return sortRows(
-      buildRows({ listing: this.listing, info: this.info, status: this.status, isMine: (c) => this.deps.isMine(c), localPathOf: (p) => this.deps.localPathOf(p) }),
+      buildRows({
+        listing: this.listing,
+        info: this.info,
+        status: this.status,
+        isMine: (c) => this.deps.isMine(c),
+        localPathOf: (p) => this.deps.localPathOf(p),
+        addedFolders: this.deps.addedFoldersIn?.(this.path, this.listing.folders) ?? [],
+      }),
       this.sort,
     );
   }
@@ -467,6 +519,8 @@ export class ExplorerModel {
       lastCheckIn: '',
     };
     if (localPath !== undefined) row.localPath = localPath;
+    // The toolbar's Get Latest, History... need the folder on the server.
+    if (this.deps.isAdded?.(this.path)) row.added = true;
     return row;
   }
 
@@ -504,7 +558,7 @@ export class ExplorerModel {
       title: S.sceTitle,
       path: this.path,
       crumbs: crumbs(this.path),
-      tree: treeRows(this.expanded, (p) => this.deps.childrenOf(p), this.path),
+      tree: treeRows(this.expanded, (p) => this.deps.childrenOf(p), this.path, (p) => this.deps.isAdded?.(p) ?? false),
       rows,
       listState: this.listState,
       infoState: this.infoState,

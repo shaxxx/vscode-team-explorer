@@ -297,4 +297,37 @@ describe('media/explorer.js', () => {
     page.fire(buttonNamed(menu, L.delete), 'click');
     expect(page.posted.at(-1)).toEqual({ type: 'action', action: 'delete', paths: [README] });
   });
+
+  it('marks your pending Adds with a +, like Visual Studio', () => {
+    const page = loadPage(SCRIPT);
+    const added = { name: 'NewModule.vb', serverPath: '$/Shop/NewModule.vb', isFolder: false, added: true, pending: 'add', users: ['Filip'], userDetails: [], latest: 'yes', lastCheckIn: '' };
+    const addedFolder = { ...added, name: 'Novo', serverPath: '$/Shop/Novo', isFolder: true };
+    page.send(state({ rows: [...state().rows, added, addedFolder] }));
+    expect(rowOf(page, '$/Shop/NewModule.vb').children[0].className).toBe('name added');
+    expect(rowOf(page, '$/Shop/Novo').children[0].className).toBe('name folder added');
+    expect(rowOf(page, README).children[0].className).toBe('name');
+    expect(cells(rowOf(page, '$/Shop/NewModule.vb'))).toEqual(['NewModule.vb', 'add', 'Filip', L.yes, '']);
+
+    // The + sits in a gutter every name has, as Visual Studio draws it. Put in
+    // front of the folder icon instead, it pushed an added folder right and it
+    // read as a subfolder of the row above (user, 2026-10-02).
+    const css = readFileSync(join(__dirname, '../../media/explorer.css'), 'utf8');
+    const rule = (selector: string) => css.split('\n').find((l) => l.startsWith(selector + ' {')) ?? '';
+    expect(rule('td.name')).toMatch(/position: relative; padding-left: 20px;/);
+    expect(rule('td.added::after')).toMatch(/content: '\+'; position: absolute; left: 6px; color: var\(--vscode-gitDecoration-addedResourceForeground\)/);
+    expect(css).not.toMatch(/td(\.folder)?\.added::before/);
+  });
+
+  it('marks a folder you added in the tree too', () => {
+    const page = loadPage(SCRIPT);
+    const tree = [...state().tree, { path: '$/Shop/Novo', name: 'Novo', depth: 2, expanded: false, loading: false, current: false, added: true }];
+    page.send(state({ tree }));
+    const labels = page.app.querySelector('.tree')!.querySelectorAll('.label');
+    expect(labels.map((l) => [l.textContent, l.className])).toEqual([['$/', 'label'], ['Shop', 'label'], ['Novo', 'label added']]);
+    // By colour alone, as VS Code's Explorer marks an added file: the tree has
+    // no gutter, and a + in front of the name read as one more level of indent.
+    const css = readFileSync(join(__dirname, '../../media/explorer.css'), 'utf8');
+    expect(css).toMatch(/^\.label\.added \{ color: var\(--vscode-gitDecoration-addedResourceForeground\); \}/m);
+    expect(css).not.toMatch(/\.label\.added::before/);
+  });
 });

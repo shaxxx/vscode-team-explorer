@@ -118,7 +118,7 @@
       });
       const node = el('div', { className: t.current ? 'node current' : 'node', role: 'treeitem', 'data-path': t.path }, [
         twisty,
-        el('span', { className: 'label', text: t.name }),
+        el('span', { className: t.added ? 'label added' : 'label', text: t.name }),
       ]);
       node.style.paddingLeft = 4 + t.depth * 14 + 'px';
       node.addEventListener('click', function (e) {
@@ -204,7 +204,7 @@
     const body = el('tbody');
     state.rows.forEach(function (r, index) {
       const tr = el('tr', { className: selected(r.serverPath) ? 'selected' : undefined, 'data-path': r.serverPath, tabindex: '0' }, [
-        el('td', { className: r.isFolder ? 'name folder' : 'name', text: r.name }),
+        el('td', { className: (r.isFolder ? 'name folder' : 'name') + (r.added ? ' added' : ''), text: r.name }),
         el('td', { text: statusCell(state.statusState, r.pending) }),
         el('td', { text: statusCell(state.statusState, r.users.join(', ')), title: r.userDetails.join('\n') || undefined }),
         el('td', { className: 'latest-' + r.latest, text: latestText(r) }),

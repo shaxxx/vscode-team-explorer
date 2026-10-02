@@ -380,6 +380,7 @@ export const S = {
     `${name} is already mapped, to ${local}. To change that, use Manage Workspace.`,
   sceNotDownloaded: (name: string) => `${name} has not been downloaded yet. Get it first.`,
   sceNotLoaded: (name: string) => `The status of ${name} is not loaded yet. Wait a moment, or press Refresh.`,
+  scePendingAdd: (name: string) => `${name} is a pending Add. It does not exist on the server yet.`,
   sceUnknownPath: 'That item is no longer listed. Press Refresh and try again.',
   sceCheckoutFolderConfirm: (names: readonly string[]) =>
     `Check out everything in ${nameList(names)}, including its subfolders?`,

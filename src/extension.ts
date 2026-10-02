@@ -812,6 +812,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
       await vscode.commands.executeCommand('teamExplorer.mapServerFolder', serverPath);
     },
     unversionedUnder: (nativeFolder) => filesUnder(scan.result.unversionedPaths(), nativeFolder, service.platform),
+    pendingChanges: () => service.pendingChanges,
     // What Phase 1's Get Latest does after a get: drop cached server copies,
     // refresh the pending changes, re-scan for files not in source control.
     afterGet: () => {

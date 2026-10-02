@@ -112,7 +112,8 @@ describe('paths', () => {
 describe('changeLabel', () => {
   it('reads like Visual Studio: lower case, Encoding only when alone, SourceRename as rename', () => {
     expect(changeLabel(new Set(['Edit']))).toBe('edit');
-    expect(changeLabel(new Set(['Add', 'Edit', 'Encoding']))).toBe('add, edit');
+    // Visual Studio says just "add": a new file's Edit and Encoding are implied.
+    expect(changeLabel(new Set(['Add', 'Edit', 'Encoding']))).toBe('add');
     expect(changeLabel(new Set(['Encoding']))).toBe('encoding');
     expect(changeLabel(new Set(['SourceRename']))).toBe('rename');
   });
@@ -427,5 +428,85 @@ describe('ExplorerModel', () => {
     const allowed = m.state().allowed;
     expect(allowed).not.toContain('undo');
     expect(allowed).toContain('checkout');
+  });
+});
+
+describe('your pending Adds, which `dir` cannot list (VS shows them with a +)', () => {
+  // `tf vc dir` lists what is on the server; a pending Add is not there yet,
+  // so NewModule.vb was missing from the list while Visual Studio showed it.
+  // `status` for the same folder has it.
+  const add = (name: string, over: Partial<OwnedPendingChange> = {}): OwnedPendingChange => ({
+    serverItem: `${FOLDER}/${name}`,
+    localPath: mappedAll(`${FOLDER}/${name}`),
+    changes: new Set(['Add', 'Edit', 'Encoding']),
+    changeFlags: 7,
+    itemType: 'File',
+    encoding: 65001,
+    itemId: -418371,
+    date: '2026-10-02T08:42:59.92+02:00',
+    owner: 'Filip',
+    computer: 'DEVPC',
+    workspace: 'DEVPC',
+    ...over,
+  });
+  const withAdds = (...adds: OwnedPendingChange[]) => rows({ status: [...STATUS, ...adds] });
+
+  it('lists a file you added, as Visual Studio does', () => {
+    const r = row(withAdds(add('NewModule.vb')), 'NewModule.vb');
+    expect(r).toEqual({
+      name: 'NewModule.vb',
+      serverPath: `${FOLDER}/NewModule.vb`,
+      isFolder: false,
+      added: true,
+      pending: 'add',
+      users: ['Filip'],
+      userDetails: ['Filip (DEVPC/DEVPC): add, 2026-10-02'],
+      statusKnown: true,
+      latest: 'yes',
+      lastCheckIn: '',
+      localPath: mappedAll(`${FOLDER}/NewModule.vb`),
+    });
+  });
+
+  it('lists a folder you added as a folder', () => {
+    const r = row(withAdds(add('Novo', { itemType: 'Folder', changes: new Set(['Add']), changeFlags: 1 })), 'Novo');
+    expect(r.isFolder).toBe(true);
+    expect(r.added).toBe(true);
+  });
+
+  it("lists neither someone else's Add, nor one deeper down, nor one dir already listed", () => {
+    const theirs = add('Theirs.vb', { owner: 'Boris', computer: 'BORIS', workspace: 'BORIS' });
+    const deeper = add('Sub/Deep.vb');
+    const listed = add('CLAUDE.md');
+    const list = withAdds(theirs, deeper, listed);
+    expect(list).toHaveLength(23);
+    expect(list.filter((r) => r.added)).toEqual([]);
+  });
+
+  it('lists a folder only a deeper Add implies once, with no change of its own, and only right here', () => {
+    const list = rows({
+      status: [...STATUS, add('Novo', { itemType: 'Folder', changes: new Set(['Add']), changeFlags: 1 })],
+      addedFolders: [`${FOLDER}/test`, `${FOLDER}/Novo`, `${FOLDER}/test/Deeper`, '$/Elsewhere/x', `${FOLDER}/CLAUDE.md`],
+    });
+    const implied = row(list, 'test');
+    expect([implied.isFolder, implied.added, implied.pending, implied.users, implied.latest]).toEqual([true, true, '', [], 'yes']);
+    // Novo has its own Add from status, which wins: one row, saying "add".
+    expect(list.filter((r) => r.name === 'Novo').map((r) => r.pending)).toEqual(['add']);
+    expect(list.filter((r) => r.added).map((r) => r.name).sort()).toEqual(['Novo', 'test']);
+  });
+
+  it('marks no listed row as added', () => {
+    expect(rows().some((r) => r.added)).toBe(false);
+  });
+
+  it('dims what needs a server version, and allows the rest', () => {
+    const added = fakeRow({ name: 'NewModule.vb', added: true, pending: 'add', serverChangeset: undefined });
+    for (const action of ['getLatest', 'getSpecific', 'checkout', 'history', 'compare', 'view', 'annotate'] as const) {
+      expect(refusal(action, [added]), action).toBe(S.scePendingAdd('NewModule.vb'));
+    }
+    for (const action of ['open', 'undo', 'rename', 'delete', 'copyPath'] as const) {
+      expect(refusal(action, [added]), action).toBeUndefined();
+    }
+    expect(refusal('getLatest', [fakeRow({}), added])).toBe(S.scePendingAdd('NewModule.vb'));
   });
 });

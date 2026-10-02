@@ -1,12 +1,15 @@
 import * as vscode from 'vscode';
 import { existsSync } from 'node:fs';
 import { relative } from 'node:path';
-import type { ExplorerService } from '../explorer/ExplorerService.js';
+import type { ExplorerService, Loaded } from '../explorer/ExplorerService.js';
+import type { DirListing } from '../tf/parseDir.js';
 import {
   ExplorerModel,
+  childPath,
   crumbs,
   isServerPath,
   nameOf,
+  parentPath,
   parseExplorerIntent,
   refusal,
   SELECTION_ONLY,
@@ -16,7 +19,7 @@ import {
 } from '../explorer/explorerModel.js';
 import { getLatestArgs, getVersionArgs, needsOverwriteConfirm, type VersionRequest } from '../explorer/getVersion.js';
 import type { PathMapper } from '../tf/PathMapper.js';
-import type { WorkspaceInfo } from '../tf/types.js';
+import { isPendingAdd, type PendingChange, type WorkspaceInfo } from '../tf/types.js';
 import { historyHtml, makeNonce } from './historyHtml.js';
 import { S } from '../tf/strings.js';
 import { scrubSecrets } from '../tf/TfClient.js';
@@ -35,7 +38,7 @@ export interface RecentChangeset {
 
 /** Everything the explorer asks of the rest of the extension (wired in extension.ts, faked in tests). */
 export interface ExplorerDeps {
-  explorer: Pick<ExplorerService, 'list' | 'details' | 'workspaces' | 'cachedListing' | 'forget' | 'get'>;
+  explorer: Pick<ExplorerService, 'list' | 'details' | 'status' | 'workspaces' | 'cachedListing' | 'forget' | 'get'>;
   /** TfvcService's PathMapper: every mapping on this computer. */
   mapper(): Pick<PathMapper, 'toLocalPath'> | undefined;
   showHistory(target: { mode: 'file' | 'folder'; serverPath: string; name: string }): Promise<void>;
@@ -44,6 +47,8 @@ export interface ExplorerDeps {
   mapServerFolder(serverPath: string): Promise<void>;
   /** Phase 1's scan: files under this native folder that are not in source control. */
   unversionedUnder(nativeFolder: string): string[];
+  /** TfvcService's: the opened folder's pending changes, the same array until the next refresh. */
+  pendingChanges(): readonly PendingChange[];
   /** After a Get: what Phase 1's Get Latest does -- drop cached server copies, refresh, re-scan. */
   afterGet(): void;
   log(line: string): void;
@@ -136,6 +141,15 @@ class ExplorerPanel {
   private workspacesLoaded = false;
   /** Bumped by every navigation; a load that finishes for an older one is dropped. */
   private generation = 0;
+  /**
+   * Folders a `status` here showed as your pending Adds, by lower-cased path:
+   * outside the opened folder, TfvcService's pending changes do not reach
+   * them. Opening one still asks `dir` first, so a checked-in folder lists
+   * normally; an entry goes once `dir` lists it or its parent's status reloads.
+   */
+  private readonly seenAdded = new Map<string, string>();
+  /** The opened folder's pending Adds, rebuilt when TfvcService's array changes. */
+  private workspaceAdds: { from: readonly PendingChange[]; adds: { path: string; isFolder: boolean }[] } | undefined;
 
   get isDisposed(): boolean {
     return this.disposed;
@@ -149,7 +163,9 @@ class ExplorerPanel {
     this.model = new ExplorerModel({
       isMine: (c) => this.mine.some((w) => same(w.name, c.workspace) && same(w.computer, c.computer)),
       localPathOf: (p) => this.deps.mapper()?.toLocalPath(p),
-      childrenOf: (p) => this.deps.explorer.cachedListing(p)?.folders,
+      childrenOf: (p) => this.childrenOf(p),
+      isAdded: (p) => this.isAddedFolder(p),
+      addedFoldersIn: (p, listed) => this.addedFoldersIn(p, listed),
     });
     const media = vscode.Uri.joinPath(root, 'media');
     const webview = panel.webview;
@@ -186,8 +202,14 @@ class ExplorerPanel {
       this.workspacesLoaded = true;
       if (this.stale(gen)) return;
     }
-    const listed = await this.deps.explorer.list(path, true);
+    // `dir` lists the server, which has no folder you added ("No items
+    // match"): then start it empty, and loadDetails' `status` lists its
+    // contents, all pending Adds too. `dir` is asked first even so: once the
+    // folder is checked in it lists, whatever was known of the Add.
+    let listed: Loaded<DirListing> = await this.deps.explorer.list(path, true);
     if (this.stale(gen)) return;
+    if (!listed.ok && this.holdsYourAdd(path)) listed = { ok: true, value: { path, folders: [], files: [] } };
+    else if (listed.ok) this.seenAdded.delete(path.toLowerCase());
     if (!listed.ok) {
       this.model.listState = 'failed';
       this.model.listError = listed.message;
@@ -252,16 +274,12 @@ class ExplorerPanel {
   private async loadDetails(gen: number): Promise<void> {
     const listing = this.model.listing;
     if (!listing) return;
-    if (listing.folders.length + listing.files.length === 0) {
-      this.model.info = [];
-      this.model.infoState = 'ok';
-      this.model.status = [];
-      this.model.statusState = 'ok';
-      this.model.loadedAt = clock();
-      this.post();
-      return;
-    }
-    const { info, status } = await this.deps.explorer.details(this.model.path);
+    // Nothing on the server here, so `info` has nothing to say; `status` still
+    // does, since a file you added here is not on the server yet.
+    const empty = listing.folders.length + listing.files.length === 0;
+    const { info, status } = empty
+      ? { info: { ok: true as const, value: [] }, status: await this.deps.explorer.status(this.model.path) }
+      : await this.deps.explorer.details(this.model.path);
     if (this.stale(gen)) return;
     if (info.ok) {
       this.model.info = info.value;
@@ -274,6 +292,7 @@ class ExplorerPanel {
     if (status.ok) {
       this.model.status = status.value;
       this.model.statusState = 'ok';
+      this.rememberAdded();
     } else {
       this.model.status = undefined;
       this.model.statusState = 'failed';
@@ -281,6 +300,75 @@ class ExplorerPanel {
     }
     this.model.loadedAt = clock();
     this.post();
+  }
+
+  /** What this folder's `status` says about its added subfolders, replacing what an earlier one said. */
+  private rememberAdded(): void {
+    const here = this.model.path;
+    for (const [k, p] of this.seenAdded) if (same(parentPath(p), here)) this.seenAdded.delete(k);
+    for (const r of this.model.rows()) if (r.added && r.isFolder) this.seenAdded.set(r.serverPath.toLowerCase(), r.serverPath);
+  }
+
+  private addsInWorkspace(): { path: string; isFolder: boolean }[] {
+    const pending = this.deps.pendingChanges();
+    if (this.workspaceAdds?.from !== pending) {
+      const adds = pending.filter(isPendingAdd).map((c) => ({ path: c.serverItem, isFolder: c.itemType === 'Folder' }));
+      this.workspaceAdds = { from: pending, adds };
+    }
+    return this.workspaceAdds.adds;
+  }
+
+  /**
+   * Your added folders directly under `parent` and not among `listed`: one
+   * you added, or one only an Add deeper down implies -- tf pends no Add for
+   * a new file's new folder (measured: test\test1.txt alone, no `test`).
+   */
+  private addedFoldersIn(parent: string, listed: readonly string[]): string[] {
+    const prefix = (parent === '$/' ? '$/' : `${parent}/`).toLowerCase();
+    const out = new Map<string, string>();
+    const take = (path: string, isFolder: boolean): void => {
+      if (!path.toLowerCase().startsWith(prefix)) return;
+      const rest = path.slice(prefix.length);
+      const slash = rest.indexOf('/');
+      // A file right here is a row from `status`, not a folder.
+      if (slash < 0 && !isFolder) return;
+      const name = slash < 0 ? rest : rest.slice(0, slash);
+      if (name === '' || listed.some((l) => same(l, name))) return;
+      out.set(name.toLowerCase(), childPath(parent, name));
+    };
+    for (const a of this.addsInWorkspace()) take(a.path, a.isFolder);
+    for (const p of this.seenAdded.values()) take(p, true);
+    return [...out.values()];
+  }
+
+  /** The subfolders `dir` listed, none for a folder you added; undefined while not known. */
+  private listedFolders(path: string): string[] | undefined {
+    return this.deps.explorer.cachedListing(path)?.folders ?? (this.isAddedFolder(path) ? [] : undefined);
+  }
+
+  /** Whether the server lacks this folder and an Add of yours makes it: decided against its parent's listing. */
+  private isAddedFolder(path: string): boolean {
+    if (path === '$/') return false;
+    const parent = parentPath(path);
+    const listed = this.listedFolders(parent);
+    return listed !== undefined && this.addedFoldersIn(parent, listed).some((p) => same(p, path));
+  }
+
+  /** After `dir` could not list `path`: an Add of yours at or under it, which makes it a folder you added. */
+  private holdsYourAdd(path: string): boolean {
+    const k = path.toLowerCase();
+    return [...this.addsInWorkspace().map((a) => a.path), ...this.seenAdded.values()].some(
+      (p) => p.toLowerCase() === k || p.toLowerCase().startsWith(`${k}/`),
+    );
+  }
+
+  /** `dir`'s subfolders plus your added ones, which `dir` cannot list; an added folder has only those. */
+  private childrenOf(path: string): string[] | undefined {
+    const listed = this.listedFolders(path);
+    if (listed === undefined) return undefined;
+    const added = this.addedFoldersIn(path, listed).map(nameOf);
+    if (added.length === 0) return listed;
+    return [...listed, ...added].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
   }
 
   private post(): void {
