@@ -77,9 +77,12 @@ describe('a file TFVC calls binary', () => {
   });
 
   it('gets gutter bars when its local bytes are text, and none when they are not', () => {
+    // A mapping's local path is tf's own, which under Wine is `Z:\tmp\...`:
+    // given the native `/tmp/...`, nothing matched on Linux (CI, 1.0.3).
+    const mapping = { serverItem: '$/T', localPath: new PathMapper([], NATIVE).toWinePath(dir) };
     const quickDiff = (change: PendingChange) =>
       new QuickDiff({
-        pathMapper: new PathMapper([{ serverItem: '$/T', localPath: dir }], NATIVE),
+        pathMapper: new PathMapper([mapping], NATIVE),
         changeFor: () => change,
       } as never);
     expect(quickDiff(binaryChange(xml)).provideOriginalResource(Uri.file(xml) as never)).toBeDefined();
