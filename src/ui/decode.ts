@@ -70,9 +70,30 @@ export function isUnsupportedCodePage(codePage: number | undefined): boolean {
   return labelForCodePage(codePage) === undefined;
 }
 
+/**
+ * Whether these bytes are UTF-8 although TFVC records another code page.
+ *
+ * `enc` is set when the item is added and survives later check-ins, so a file
+ * added as windows-1250 and since saved as UTF-8 with no BOM stays enc=1250
+ * while its bytes are UTF-8. Decoding them as 1250 turned every č/ž into
+ * ÄŤ/Ĺľ, and the diff marked each such line as changed, against a local pane
+ * that EncodingFixer leaves as UTF-8 for the same valid-UTF-8 bytes.
+ *
+ * Valid UTF-8 is decisive for the legacy pages: a cp1250 č (E8) or ž (9E)
+ * next to an ASCII letter is never a valid UTF-8 sequence, and pure ASCII
+ * decodes identically either way. Not for UTF-16: 'žš' in UTF-16LE is
+ * 7E 01 61 01, which is valid UTF-8, so there TFVC's code page stands.
+ */
+function isUtf8DespiteCodePage(bytes: Buffer, codePage: number): boolean {
+  if (codePage === 1200 || codePage === 1201) return false;
+  return isValidUtf8(bytes);
+}
+
 export function decodeWithCodePage(bytes: Buffer, codePage: number | undefined): string {
   const label =
-    codePage === undefined || codePage < 0 ? 'utf-8' : (labelForCodePage(codePage) ?? 'utf-8');
+    codePage === undefined || codePage < 0 || isUtf8DespiteCodePage(bytes, codePage)
+      ? 'utf-8'
+      : (labelForCodePage(codePage) ?? 'utf-8');
 
   try {
     // TextDecoder strips a leading BOM; Buffer.toString('utf8') does NOT, and

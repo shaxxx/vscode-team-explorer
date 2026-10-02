@@ -46,6 +46,17 @@ describe('decodeWithCodePage', () => {
     expect(decodeWithCodePage(utf8, -3)).toBe('žš');
   });
 
+  it('reads UTF-8 bytes as UTF-8 even when TFVC still records 1250', () => {
+    // sqlModule.vb: added as windows-1250, later saved as UTF-8 with no BOM, and
+    // `enc` stayed 1250. Decoded as 1250 every Croatian letter became mojibake
+    // (ž -> Ĺľ, č -> ÄŤ) and the diff marked each such line as changed, while
+    // the local pane showed the identical text correctly.
+    const line = "'sadržava tekst i broj za sve vrste PDV, podaci za eRačune";
+    expect(decodeWithCodePage(Buffer.from(line, 'utf8'), 1250)).toBe(line);
+    // Real cp1250 Croatian is never valid UTF-8, so it still goes to 1250.
+    expect(decodeWithCodePage(Buffer.from([0x52, 0x61, 0xe8, 0x75, 0x6e]), 1250)).toBe('Račun');
+  });
+
   it('falls back to UTF-8 for an unknown code page rather than throwing', () => {
     expect(decodeWithCodePage(Buffer.from('žš', 'utf8'), 99999)).toBe('žš');
   });
