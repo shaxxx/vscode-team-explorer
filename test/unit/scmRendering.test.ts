@@ -520,3 +520,22 @@ describe('pending rows carry their state as contextValue (plan 3)', () => {
     expect(rows.map((r) => r.contextValue)).toEqual(['checkedOut']);
   });
 });
+
+describe('clicking a pending row', () => {
+  type Row = { command: { command: string; arguments: { fsPath: string }[] } };
+
+  it('opens a pending Add, which has no server version to compare with', () => {
+    // Compare only answered "NewModule.vb is a pending Add ... nothing to
+    // compare with", so a click on a new file did nothing useful.
+    const { control } = provider([change(1, { changes: new Set(['Add', 'Edit', 'Encoding']), version: undefined })]);
+    const [row] = control.groups.get('included')!.resourceStates as unknown as Row[];
+    expect(row.command.command).toBe('vscode.open');
+    expect(row.command.arguments[0].fsPath).toBe('C:\\work\\Vesta\\File1.vb');
+  });
+
+  it('still compares an edit', () => {
+    const { control } = provider([change(1)]);
+    const [row] = control.groups.get('included')!.resourceStates as unknown as Row[];
+    expect(row.command.command).toBe('teamExplorer.compareWithLatest');
+  });
+});

@@ -2,7 +2,7 @@ import { statSync } from 'node:fs';
 import * as vscode from 'vscode';
 import { S } from '../tf/strings.js';
 import type { TfvcService } from '../TfvcService.js';
-import type { PendingChange } from '../tf/types.js';
+import { isPendingAdd, type PendingChange } from '../tf/types.js';
 import type { ScanResult } from '../scan/ScanResult.js';
 import { pendingStateOf } from '../state/FileState.js';
 
@@ -332,11 +332,15 @@ export class ScmProvider implements vscode.Disposable {
       // the NEW name, uncommitted until check-in -- and Check Out only on a
       // rename.
       contextValue: pendingStateOf(change),
-      command: {
-        command: 'teamExplorer.compareWithLatest',
-        title: S.compareWithLatest,
-        arguments: [vscode.Uri.file(local)],
-      },
+      // A pending Add has no server version, so Compare could only say so;
+      // a click opens it instead, as the Explorer would.
+      command: isPendingAdd(change)
+        ? { command: 'vscode.open', title: S.open, arguments: [vscode.Uri.file(local)] }
+        : {
+            command: 'teamExplorer.compareWithLatest',
+            title: S.compareWithLatest,
+            arguments: [vscode.Uri.file(local)],
+          },
     };
   }
 
