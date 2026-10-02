@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- Fixed: comparing with the server version no longer shows Croatian and other non-ASCII letters as mojibake for a file that TFVC still records as windows-1250 but that was saved as UTF-8. Before, every line with such a letter showed as changed. Annotate, History and shelveset views had the same fault and are fixed too.
+
 ## 1.0.1
 
 - Fixed: automatic checkout now happens on the first keystroke. A single keystroke into a clean file used to do nothing, and only a second one checked the file out.
